@@ -88,12 +88,22 @@ This md file contains an explanation as to what all the possible keys does for e
 
 ## config_ai.json
 
-* ``max_subwaves`` - The max amount of wavespawn groups which are allowed.
+* ``max_waves`` - The desired amount of waves which will be created for this mission.
+* ``max_subwaves`` - The max amount of wavespawn groups which are allowed per wave.
 * ``max_wavespawns`` - Within each subwave group, this is the maximum allowed amount of subwaves which can be used.
 * ``bot_passive_chance`` - When making a new bot, this is the chance that it will be allowed to have a passive weapon. Must be a value between ``0`` and ``1``.
+* ``bot_minigiant_chance`` - When making a new bot with a strength above ``bot_hp_threshold``, this is the chance that it will be chosen to be a minigiant.
+* ``bot_hp_threshold`` - The minimum strength of a bot to be eligble for minigiant status.
+* ``bot_giant_hp_threshold`` - The minimum strength where a giant's bot total strength will be split evenly between endurance and power.
+* ``bot_deviance_chance`` - When making a new bot, this is the chance that an attribute value will be chosen at random instead of logically.
+* ``bot_deviance_max`` - The maximum number of 'deviant' attributes a robot can have.
 * ``bot_common_chance`` - When making a subwave, this is the weight that a common robot type will be chosen.
 * ``bot_giant_chance`` - When making a subwave, this is the weight that a giant robot type will be chosen.
 * ``bot_tank_chance`` - When making a subwave, this is the weight that a tank will be chosen.
 * ``bot_boss_chance`` - When making a subwave, this is the weight that a boss robot type will be chosen.
+* ``wavespawn_regular_weight`` - When making a subwave, this is the weight that a regular wavespawn (with only one bot type) will be chosen.
+* ``wavespawn_random_weight`` - When making a subwave, this is the weight that RandomChoice will be chosen as the spawner.
+* ``wavespawn_squad_weight`` - When making a subwave, this is the weight that Squad will be chosen as the spawner.
 * ``strength_variance`` - A range of the strength multiplied and divided by this value will be applied to the ideal strength of a subwave. A bot from templates can be chosen from within this range.
+* ``endless`` - If set to true, separate waves will instead be merged together instead of split among separate waves.
  
