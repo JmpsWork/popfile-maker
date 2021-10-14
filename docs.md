@@ -86,24 +86,56 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``bot_types`` - The amount of unique wavespawns which can be used this wave.
 * ``custom_only`` - The program will exclusively create new tfbots instead of opting to use ones found inside its templates.
 
+## config_map.json
+
+* ``name`` - The name of this map.
+* ``relay_start`` - The name of the wave start relay for this map.
+* ``relay_end`` - The name of the wave end relay for this map.
+* ``spawn_common`` - All the possible spawns common robots can use, each with their own weight.
+* ``spawn_giant`` - All the possible spawns giant robots can use, each with their own weight.
+* ``spawn_tank`` - All the possible spawns tanks can use, each with their own weight.
+* ``spawn_boss`` - All the possible spawns boss robots can use, each with their own weight.
+* ``length`` - The approximate length of this map.
+
 ## config_ai.json
 
+* ``cash_start_min`` - The minimum starting cash this mission can have.
+* ``cash_start_max`` - The maximum starting cash this mission can have.
+* ``cash_per_min`` - The minimum amount of cash per wave.
+* ``cash_per_max`` - The maximum amount of cash per wave.
 * ``max_waves`` - The desired amount of waves which will be created for this mission.
-* ``max_subwaves`` - The max amount of wavespawn groups which are allowed per wave.
 * ``max_wavespawns`` - Within each subwave group, this is the maximum allowed amount of subwaves which can be used.
+* ``max_tfbots`` - The maximum amount of TFBots allowed alive in each subwave group.
+* ``bot_attack_spawnroom`` - If bots should be allowed to attack while in spawn.
+* ``bot_attribute_threshold`` - The minimum strength required for a custom bot to be allowed to use attributes.
+* ``bot_attribute_per`` - Increase the maximum amount of possible attribute per this amount of strength.
+* ``bot_attribute_giant_per`` - Identical to ``bot_attribute_per``, but applies to giants instead.
+* ``bot_attribute_cap`` - The maximum amount of attributes allowed to be used at once for a single weapon. 
 * ``bot_passive_chance`` - When making a new bot, this is the chance that it will be allowed to have a passive weapon. Must be a value between ``0`` and ``1``.
 * ``bot_minigiant_chance`` - When making a new bot with a strength above ``bot_hp_threshold``, this is the chance that it will be chosen to be a minigiant.
 * ``bot_hp_threshold`` - The minimum strength of a bot to be eligble for minigiant status.
 * ``bot_giant_hp_threshold`` - The minimum strength where a giant's bot total strength will be split evenly between endurance and power.
 * ``bot_deviance_chance`` - When making a new bot, this is the chance that an attribute value will be chosen at random instead of logically.
+* ``bot_crit_threshold`` - The minimum strength a bot can have before being given ``Attributes AlwaysCrit``.
+* ``bot_deviance_chance`` - The percentage chance an attribute can be deviant.
 * ``bot_deviance_max`` - The maximum number of 'deviant' attributes a robot can have.
+* ``bot_common_charge_chance`` - The percentage chance a common robot with a chargeable weapon will start with it fully charged.
 * ``bot_common_chance`` - When making a subwave, this is the weight that a common robot type will be chosen.
 * ``bot_giant_chance`` - When making a subwave, this is the weight that a giant robot type will be chosen.
 * ``bot_tank_chance`` - When making a subwave, this is the weight that a tank will be chosen.
 * ``bot_boss_chance`` - When making a subwave, this is the weight that a boss robot type will be chosen.
+* ``global_strength_mult`` - The global multiplier to strength when making a mission.
+* ``tank_strength_mult`` - The multiplier to individual tank strength when making a wavespawn with them.
 * ``wavespawn_regular_weight`` - When making a subwave, this is the weight that a regular wavespawn (with only one bot type) will be chosen.
 * ``wavespawn_random_weight`` - When making a subwave, this is the weight that RandomChoice will be chosen as the spawner.
 * ``wavespawn_squad_weight`` - When making a subwave, this is the weight that Squad will be chosen as the spawner.
+* ``wavespawn_squad_max`` - The maximum amount of robots which can be used in a squad.
+* ``wavespawn_durations`` - The possible durations a subwave can have, each with their own weighted chance.
+* ``wavespawn_ggroup_threshold`` - The minimum strength that giants require before their SpawnCount can exceed 1.
+* ``wavespawn_giant_amount`` - The possible amounts of giants in a wavespawn, each with their own weighted chance.
+* ``wavespawn_amount`` - The possible amount of wavespawns each subwave can have, each with their own weighted chance.
+* ``subwave_amount`` - The possible amount of subwaves each wave can have, each with their own weighted chance.
 * ``strength_variance`` - A range of the strength multiplied and divided by this value will be applied to the ideal strength of a subwave. A bot from templates can be chosen from within this range.
 * ``endless`` - If set to true, separate waves will instead be merged together instead of split among separate waves.
+* ``spaced`` - If set to true, the output file will be properly spaced and lined, instead of being but on 1 massive line.
  
