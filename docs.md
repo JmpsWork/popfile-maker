@@ -104,7 +104,6 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``cash_per_min`` - The minimum amount of cash per wave.
 * ``cash_per_max`` - The maximum amount of cash per wave.
 * ``max_waves`` - The desired amount of waves which will be created for this mission.
-* ``max_wavespawns`` - Within each subwave group, this is the maximum allowed amount of subwaves which can be used.
 * ``max_tfbots`` - The maximum amount of TFBots allowed alive in each subwave group.
 * ``bot_attack_spawnroom`` - If bots should be allowed to attack while in spawn.
 * ``bot_attribute_threshold`` - The minimum strength required for a custom bot to be allowed to use attributes.
@@ -115,15 +114,20 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``bot_minigiant_chance`` - When making a new bot with a strength above ``bot_hp_threshold``, this is the chance that it will be chosen to be a minigiant.
 * ``bot_hp_threshold`` - The minimum strength of a bot to be eligble for minigiant status.
 * ``bot_giant_hp_threshold`` - The minimum strength where a giant's bot total strength will be split evenly between endurance and power.
+* ``bot_burst_chance`` - The percentage chance from ``0`` to ``1`` that a bot with an eligible weapon will be given HoldFireUntilFullReload.
 * ``bot_deviance_chance`` - When making a new bot, this is the chance that an attribute value will be chosen at random instead of logically.
 * ``bot_crit_threshold`` - The minimum strength a bot can have before being given ``Attributes AlwaysCrit``.
+* ``bot_crit_chance`` - The percentage chance a bot, if eligible, will be given crits.
 * ``bot_deviance_chance`` - The percentage chance an attribute can be deviant.
 * ``bot_deviance_max`` - The maximum number of 'deviant' attributes a robot can have.
 * ``bot_common_charge_chance`` - The percentage chance a common robot with a chargeable weapon will start with it fully charged.
+* ``bot_giant_charge_threshold`` - The strength threshold before a randomly made bot can be given SpawnWithFullCharge.
 * ``bot_common_chance`` - When making a subwave, this is the weight that a common robot type will be chosen.
 * ``bot_giant_chance`` - When making a subwave, this is the weight that a giant robot type will be chosen.
 * ``bot_tank_chance`` - When making a subwave, this is the weight that a tank will be chosen.
 * ``bot_boss_chance`` - When making a subwave, this is the weight that a boss robot type will be chosen.
+* ``bot_boss_strength_mult`` - When determining what boss bot to use, it multiplies the searched strength by this multiplier.
+* ``bot_boss_custom_only`` - If only randomly generated bots should be used as bosses.
 * ``global_strength_mult`` - The global multiplier to strength when making a mission.
 * ``tank_strength_mult`` - The multiplier to individual tank strength when making a wavespawn with them.
 * ``wavespawn_regular_weight`` - When making a subwave, this is the weight that a regular wavespawn (with only one bot type) will be chosen.
