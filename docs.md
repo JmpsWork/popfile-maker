@@ -82,8 +82,8 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``no`` - A list of bots which cannot be used for this wave. Can contain ``commons``, ``giants``, ``tanks`` or ``boss``.
 * ``must_include`` - A list of bots which must be included in this wave, at least once. Can contain ``commons``, ``giants``, ``tanks`` or ``boss``.
 * ``subwaves`` - Override the amount of subwaves (groups of identically named wavespawns) which can be used this wave.
-* ``bot_amount`` - The amount of bots which can be used this wave.
-* ``bot_types`` - The amount of unique wavespawns which can be used this wave.
+* ``bot_amount`` - Unused.
+* ``bot_types`` - Sets the amount of wavespawns per subwave this wave will have.
 * ``custom_only`` - The program will exclusively create new tfbots instead of opting to use ones found inside its templates.
 
 ## config_map.json
@@ -115,7 +115,6 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``bot_hp_threshold`` - The minimum strength of a bot to be eligble for minigiant status.
 * ``bot_giant_hp_threshold`` - The minimum strength where a giant's bot total strength will be split evenly between endurance and power.
 * ``bot_burst_chance`` - The percentage chance from ``0`` to ``1`` that a bot with an eligible weapon will be given HoldFireUntilFullReload.
-* ``bot_deviance_chance`` - When making a new bot, this is the chance that an attribute value will be chosen at random instead of logically.
 * ``bot_crit_threshold`` - The minimum strength a bot can have before being given ``Attributes AlwaysCrit``.
 * ``bot_crit_chance`` - The percentage chance a bot, if eligible, will be given crits.
 * ``bot_deviance_chance`` - The percentage chance an attribute can be deviant.
@@ -139,6 +138,7 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``wavespawn_giant_amount`` - The possible amounts of giants in a wavespawn, each with their own weighted chance.
 * ``wavespawn_amount`` - The possible amount of wavespawns each subwave can have, each with their own weighted chance.
 * ``subwave_amount`` - The possible amount of subwaves each wave can have, each with their own weighted chance.
+* ``allow_reoccuring`` - If set to true, allows randomly made bots to be used as templates for future waves.
 * ``strength_variance`` - A range of the strength multiplied and divided by this value will be applied to the ideal strength of a subwave. A bot from templates can be chosen from within this range.
 * ``endless`` - If set to true, separate waves will instead be merged together instead of split among separate waves.
 * ``spaced`` - If set to true, the output file will be properly spaced and lined, instead of being but on 1 massive line.
