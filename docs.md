@@ -139,7 +139,15 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``wavespawn_amount`` - The possible amount of wavespawns each subwave can have, each with their own weighted chance.
 * ``subwave_amount`` - The possible amount of subwaves each wave can have, each with their own weighted chance.
 * ``allow_reoccuring`` - If set to true, allows randomly made bots to be used as templates for future waves.
+* ``wave_support_chance`` - The chance that any wave will have mission support, if allowed.
+* ``wave_support_strength`` - The base strength value that support bots will have to work with.
+* ``wave_support_amount`` - The possible amount of bots in each mission support, each with their own weighted chance.
+* ``wave_strength_growth`` - How fast the exponential curve grows in relation to money. Keep this value very small for good results.
+* ``wave_strength_steep`` - A float number which determines where the curve grows.
+* ``wave_strength_alt_mult`` - The alternate strength function's multiplier, stacked with the base strength multiplier.
+* ``wave_strength_alt_slope`` - The alternate strength function's growth amount. Higher value make the growth significantly slower.
 * ``strength_variance`` - A range of the strength multiplied and divided by this value will be applied to the ideal strength of a subwave. A bot from templates can be chosen from within this range.
 * ``endless`` - If set to true, separate waves will instead be merged together instead of split among separate waves.
 * ``spaced`` - If set to true, the output file will be properly spaced and lined, instead of being but on 1 massive line.
+* ``modded`` - If set to true, allows the use of SIGSEGV exclusive keys.
  
