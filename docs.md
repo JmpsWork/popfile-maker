@@ -121,6 +121,7 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``bot_deviance_max`` - The maximum number of 'deviant' attributes a robot can have.
 * ``bot_common_charge_chance`` - The percentage chance a common robot with a chargeable weapon will start with it fully charged.
 * ``bot_giant_charge_threshold`` - The strength threshold before a randomly made bot can be given SpawnWithFullCharge.
+* ``bot_giant_search_add`` - When searched for eligible templates, this strength will be added to desired search strength. Helps find template giants for lower money waves.
 * ``bot_common_chance`` - When making a subwave, this is the weight that a common robot type will be chosen.
 * ``bot_giant_chance`` - When making a subwave, this is the weight that a giant robot type will be chosen.
 * ``bot_tank_chance`` - When making a subwave, this is the weight that a tank will be chosen.
@@ -141,7 +142,8 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``allow_reoccuring`` - If set to true, allows randomly made bots to be used as templates for future waves.
 * ``wave_support_chance`` - The chance that any wave will have mission support, if allowed.
 * ``wave_support_strength`` - The base strength value that support bots will have to work with.
-* ``wave_support_amount`` - The possible amount of bots in each mission support, each with their own weighted chance.
+* ``wave_support_amount`` - The possible amount of separate support missions that a wave can have, each with their own weighted chance.
+* ``wave_support_bot_amount`` - The possible amount of bots that can be used for each support mission, each with their own weighted chance.
 * ``wave_strength_growth`` - How fast the exponential curve grows in relation to money. Keep this value very small for good results.
 * ``wave_strength_steep`` - A float number which determines where the curve grows.
 * ``wave_strength_alt_mult`` - The alternate strength function's multiplier, stacked with the base strength multiplier.
