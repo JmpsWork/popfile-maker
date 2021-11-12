@@ -1,0 +1,10 @@
+{
+  "name": "mvm_bigrock",
+  "relay_start": "wave_start_relay",
+  "relay_end": "wave_finished_relay",
+  "spawn_common": {"spawnbot": 100},
+  "spawn_giant": {"spawnbot": 50},
+  "spawn_tank": {"boss_path_a1": 50},
+  "spawn_boss": {"spawnbot_mission_spy": 50},
+  "length": 12000
+}

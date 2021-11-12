@@ -1,0 +1,70 @@
+WaveSchedule
+{
+	Templates
+	{
+	    T_TFBot_Scout_Easy
+	    {
+	        Class Scout
+	        Skill easy
+	    }
+	    T_TFBot_Scout_Expert
+	    {
+	        Class Scout
+	        Skill expert
+	    }
+	    T_TFBot_Soldier_Easy
+	    {
+	        Class Soldier
+	        Skill easy
+	    }
+	    T_TFBot_Soldier_Expert
+	    {
+	        Class Soldier
+	        Skill expert
+	    }
+	    T_TFBot_Pyro_Easy
+	    {
+	        Class Pyro
+	        Skill easy
+	    }
+	    T_TFBot_Pyro_Expert
+	    {
+	        Class Pyro
+	        Skill expert
+	    }
+	    T_TFBot_Demoman_Easy
+	    {
+	        Class Demoman
+	        Skill easy
+	    }
+	    T_TFBot_Demoman_Expert
+	    {
+	        Class Demoman
+	        Skill expert
+	    }
+	    T_TFBot_Heavy_Easy
+	    {
+            Class Heavy
+            Skill easy
+	    }
+	    T_TFBot_Heavy_Expert
+	    {
+	        Class Heavy
+            Skill expert
+	    }
+	    T_TFBot_Medic_Easy
+	    {
+	        Class Medic
+	        Skill easy
+	        WeaponRestrictions SecondaryOnly
+	    }
+	    T_TFBot_Medic_Expert
+	    {
+	        Class Medic
+	        Skill expert
+	        Attributes IgnoreEnemies
+	        Attributes SpawnWithFullCharge
+	        WeaponRestrictions SecondaryOnly
+	    }
+    }
+}

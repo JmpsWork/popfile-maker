@@ -1,0 +1,637 @@
+{
+  "scout": {
+    "health": 125,
+    "health_giant": 1600,
+    "power": 60,
+    "speed": 400,
+    "power_mult_skill": [0.25, 0.85, 2, 2.5],
+    "power_mult_weapon": [1, 1, 0.2],
+    "primaries": [
+      {
+        "name": "tf_weapon_scattergun",
+        "weight": 50
+      },
+      {
+        "name": "the soda popper",
+        "weight": 10
+      },
+      {
+        "name": "the force-a-nature",
+        "weight": 10
+      },
+      {
+        "name": "baby face's blaster",
+        "weight": 10
+      },
+      {
+        "name": "the shortstop",
+        "weight": 20
+      }
+    ],
+    "secondaries": [
+      {
+        "name": "tf_weapon_pistol_scout",
+        "weight": 40
+      },
+      {
+        "name": "the winger",
+        "weight": 20
+      },
+      {
+        "name": "pretty boy's pocket pistol",
+        "weight": 20
+      },
+      {
+        "name": "crit-a-cola",
+        "passive": true,
+        "weight": 20
+      },
+      {
+        "name": "bonk! atomic punch",
+        "passive": true,
+        "weight": 20
+      },
+      {
+        "name": "mad milk",
+        "weight": 10
+      },
+      {
+        "name": "the flying guillotine",
+        "weight": 5
+      }
+    ],
+    "melee": [
+      {
+        "name": "tf_weapon_bat",
+        "weight": 30
+      },
+      {
+        "name": "the holy mackerel",
+        "weight": 30
+      },
+      {
+        "name": "sun-on-a-stick",
+        "weight": 10
+      },
+      {
+        "name": "the atomizer",
+        "weight": 20
+      },
+      {
+        "name": "the sandman",
+        "weight": 20
+      },
+      {
+        "name": "the fan o'war",
+        "weight": 20
+      }
+    ]
+  },
+  "soldier": {
+    "health": 200,
+    "health_giant": 4200,
+    "power": 175,
+    "speed": 240,
+    "power_mult_skill": [0.75, 1, 1.5, 1.6],
+    "power_mult_weapon": [1, 0.6, 0.2],
+    "primaries": [
+      {
+        "name": "tf_weapon_rocketlauncher",
+        "burst": 1,
+        "weight": 50
+      },
+      {
+        "name": "the original",
+        "burst": 1,
+        "weight": 20
+      },
+      {
+        "name": "the cow mangler 5000",
+        "burst": 1,
+        "weight": 20
+      },
+      {
+        "name": "the direct hit",
+        "burst": 1,
+        "weight": 20
+      },
+      {
+        "name": "the black box",
+        "burst": 2,
+        "weight": 10
+      },
+      {
+        "name": "the liberty launcher",
+        "burst": 2,
+        "weight": 10
+      }
+    ],
+    "secondaries": [
+      {
+        "name": "tf_weapon_shotgun_soldier",
+        "weight": 60
+      },
+      {
+        "name": "the righteous bison",
+        "weight": 60
+      },
+      {
+        "name": "the reserve shooter",
+        "weight": 10
+      },
+      {
+        "name": "the concheror",
+        "passive": true,
+        "charge": true,
+        "weight": 60
+      },
+      {
+        "name": "the battalion's backup",
+        "passive": true,
+        "charge": true,
+        "weight": 40
+      },
+      {
+        "name": "the buff banner",
+        "passive": true,
+        "charge": true,
+        "weight": 80
+      },
+      {
+        "name": "the gunboats",
+        "passive": true,
+        "weight": 20
+      },
+      {
+        "name": "the mantreads",
+        "passive": true,
+        "weight": 20
+      }
+    ],
+    "melee": [
+      {
+        "name": "tf_weapon_shovel",
+        "weight": 10
+      },
+      {
+        "name": "the market gardener",
+        "weight": 10
+      },
+      {
+        "name": "the half-zatoichi",
+        "weight": 40
+      },
+      {
+        "name": "the escape plan",
+        "weight": 50
+      },
+      {
+        "name": "the equalizer",
+        "weight": 50
+      }
+    ]
+  },
+  "pyro": {
+    "health": 175,
+    "health_giant": 3000,
+    "power": 100,
+    "speed": 300,
+    "power_mult_skill": [0.5, 1, 1.8, 2],
+    "power_mult_weapon": [1, 0.35, 0.25],
+    "primaries": [
+      {
+        "name": "tf_weapon_flamethrower",
+        "weight": 100
+      },
+      {
+        "name": "the degreaser",
+        "weight": 10
+      },
+      {
+        "name": "the dragon's fury",
+        "weight": 40
+      },
+      {
+        "name": "the backburner",
+        "alt": ["festive backburner 2014"],
+        "weight": 30
+      },
+      {
+        "name": "the phlogistinator",
+        "charge": true,
+        "weight": 50
+      }
+    ],
+    "secondaries": [
+      {
+        "name": "tf_weapon_shotgun_pyro",
+        "weight": 10
+      },
+      {
+        "name": "the flare gun",
+        "weight": 30
+      },
+      {
+        "name": "the scorch shot",
+        "weight": 30
+      },
+      {
+        "name": "the detonator",
+        "weight": 30
+      }
+    ],
+    "melee": [
+      {
+        "name": "tf_weapon_axe",
+        "weight": 20
+      },
+      {
+        "name": "the back scratcher",
+        "weight": 100
+      },
+      {
+        "name": "the neon annihilator",
+        "weight": 40
+      }
+    ]
+  },
+  "demoman": {
+    "health": 175,
+    "power": 175,
+    "speed": 280,
+    "health_giant": 3600,
+    "power_mult_skill": [0.75, 1, 1.25, 1.25],
+    "power_mult_weapon": [1, 1, 0.12],
+    "primaries": [
+      {
+        "name": "tf_weapon_grenadelauncher",
+        "burst": 1,
+        "weight": 100
+      },
+      {
+        "name": "the iron bomber",
+        "burst": 1,
+        "weight": 5000
+      },
+      {
+        "name": "the loch-n-load",
+        "burst": 2,
+        "weight": 30
+      },
+      {
+        "name": "the bootlegger",
+        "alt": ["ali baba's wee booties"],
+        "passive": true,
+        "weight": 50
+      }
+    ],
+    "secondaries": [
+      {
+        "name": "tf_weapon_pipebomblauncher",
+        "weight": 100
+      },
+      {
+        "name": "the chargin' targe",
+        "passive": true,
+        "weight": 50
+      },
+      {
+        "name": "the splendid screen",
+        "passive": true,
+        "weight": 50
+      },
+      {
+        "name": "the tide turner",
+        "passive": true,
+        "weight": 50
+      }
+    ],
+    "melee": [
+      {
+        "name": "tf_weapon_bottle",
+        "weight": 20
+      },
+      {
+        "name": "the eyelander",
+        "weight": 30
+      },
+      {
+        "name": "the persian persuader",
+        "weight": 20
+      },
+      {
+        "name": "the half-zatoichi",
+        "weight": 20
+      },
+      {
+        "name": "the claidheamohmor",
+        "weight": 20
+      }
+    ]
+  },
+  "heavy": {
+    "health": 300,
+    "health_giant": 5000,
+    "power": 200,
+    "speed": 230,
+    "power_mult_skill": [0.5, 1, 2, 2.5],
+    "power_mult_weapon": [1.5, 0.5, 0.25],
+    "primaries": [
+      {
+        "name": "tf_weapon_minigun",
+        "alt": ["iron curtain"],
+        "weight": 100
+      },
+      {
+        "name": "the huo long heatmaker",
+        "weight": 30
+      },
+      {
+        "name": "the brass beast",
+        "weight": 40
+      },
+      {
+        "name": "tomislav",
+        "weight": 30
+      },
+      {
+        "name": "natascha",
+        "weight": 40
+      },
+      {
+        "name": "deflector",
+        "weight": 40
+      }
+    ],
+    "secondaries": [
+      {
+        "name": "tf_weapon_shotgun_hwg",
+        "weight": 100
+      },
+      {
+        "name": "the family business",
+        "weight": 30
+      },
+      {
+        "name": "the robo-sandvich",
+        "passive": true,
+        "weight": 15
+      },
+      {
+        "name": "the buffalo steak sandvich",
+        "passive": true,
+        "weight": 20
+      }
+    ],
+    "melee": [
+      {
+        "name": "tf_weapon_fists",
+        "weight": 10
+      },
+      {
+        "name": "fists of steel",
+        "weight": 90
+      },
+      {
+        "name": "gloves of running urgently mvm",
+        "weight": 80
+      },
+      {
+        "name": "the killing gloves of boxing",
+        "weight": 80
+      },
+      {
+        "name": "warrior's spirit",
+        "weight": 40
+      }
+    ]
+  },
+  "engineer": {
+    "health": 250,
+    "health_giant": 2400,
+    "power": 50,
+    "speed": 300,
+    "power_mult_skill": [0.33, 1, 1.25, 1.25],
+    "power_mult_weapon": [1, 0.75, 0.33],
+    "support": true,
+    "support_power_mult": 1.1,
+    "primaries": [
+      {
+        "name": "tf_weapon_shotgun_primary",
+        "weight": 20
+      },
+      {
+        "name": "the frontier justice",
+        "weight": 20
+      },
+      {
+        "name": "the widowmaker",
+        "weight": 20
+      }
+    ],
+    "secondaries": [
+      {
+        "name": "tf_weapon_pistol",
+        "weight": 100
+      },
+      {
+        "name": "the short circuit",
+        "weight": 20
+      }
+    ],
+    "melee": [
+      {
+        "name": "tf_weapon_wrench",
+        "weight": 20
+      },
+      {
+        "name": "the jag",
+        "weight": 20
+      },
+      {
+        "name": "the eureka effect",
+        "weight": 20
+      },
+      {
+        "name": "the gunslinger",
+        "weight": 20
+      }
+    ]
+  },
+  "medic": {
+    "health": 150,
+    "health_giant": 4500,
+    "power": 75,
+    "speed": 320,
+    "power_mult_skill": [0.8, 1, 1, 1],
+    "power_mult_weapon": [0.5, 1, 0.1],
+    "primaries": [
+      {
+        "name": "tf_weapon_syringegun",
+        "weight": 20
+      },
+      {
+        "name": "the crusader's crossbow",
+        "weight": 20
+      },
+      {
+        "name": "the blutsauger",
+        "weight": 20
+      }
+    ],
+    "secondaries": [
+      {
+        "name": "tf_weapon_medigun",
+        "charge": true,
+        "weight": 30
+      },
+      {
+        "name": "the quick-fix",
+        "charge": true,
+        "weight": 40
+      },
+      {
+        "name": "the kritzkrieg",
+        "charge": true,
+        "weight": 20
+      }
+    ],
+    "melee": [
+      {
+        "name": "tf_weapon_bonesaw",
+        "weight": 20
+      },
+      {
+        "name": "tf_weapon_bonesaw",
+        "weight": 20
+      },
+      {
+        "name": "tf_weapon_bonesaw",
+        "weight": 20
+      }
+    ]
+  },
+  "sniper": {
+    "health": 125,
+    "health_giant": 3000,
+    "power": 75,
+    "speed": 300,
+    "power_mult_skill": [0.2, 0.6, 1, 1.15],
+    "power_mult_weapon": [1, 0.8, 0.2],
+    "support": true,
+    "support_power_mult": 1.05,
+    "primaries": [
+      {
+        "name": "tf_weapon_sniperrifle",
+        "weight": 40
+      },
+      {
+        "name": "the sydney sleeper",
+        "weight": 40
+      },
+      {
+        "name": "the huntsman",
+        "weight": 100
+      },
+      {
+        "name": "the machina",
+        "weight": 30
+      },
+      {
+        "name": "the bazaar bargain",
+        "weight": 20
+      }
+    ],
+    "secondaries": [
+      {
+        "name": "tf_weapon_smg",
+        "weight": 100
+      },
+      {
+        "name": "the cleaner's carbine",
+        "weight": 80
+      },
+      {
+        "name": "jarate",
+        "weight": 30
+      },
+      {
+        "name": "the razorback",
+        "passive": true,
+        "weight": 25
+      },
+      {
+        "name": "darwin's danger shield",
+        "passive": true,
+        "weight": 50
+      },
+      {
+        "name": "the cozy camper",
+        "passive": true,
+        "weight": 25
+      }
+    ],
+    "melee": [
+      {
+        "name": "tf_weapon_kukri",
+        "weight": 20
+      },
+      {
+        "name": "the shahanshah",
+        "weight": 50
+      },
+      {
+        "name": "the bushwacka",
+        "weight": 20
+      }
+    ]
+  },
+  "spy": {
+    "health": 125,
+    "health_giant": 1600,
+    "power": 30,
+    "speed": 320,
+    "power_mult_skill": [0.33, 0.66, 1, 1.3],
+    "power_mult_weapon": [1, 0, 1],
+    "support": true,
+    "support_power_mult": 1.05,
+    "primaries": [
+      {
+        "name": "tf_weapon_revolver",
+        "weight": 100
+      },
+      {
+        "name": "the enforcer",
+        "weight": 80
+      },
+      {
+        "name": "the diamondback",
+        "weight": 40
+      }
+    ],
+    "secondaries": [
+      {
+        "name": "tf_weapon_sapper",
+        "weight": 10
+      }
+    ],
+    "melee": [
+      {
+        "name": "tf_weapon_knife",
+        "weight": 20
+      },
+      {
+        "name": "the big earner",
+        "weight": 20
+      },
+      {
+        "name": "conniver's kunai",
+        "weight": 20
+      },
+      {
+        "name": "your eternal reward",
+        "weight": 20
+      }
+    ]
+  }
+}
