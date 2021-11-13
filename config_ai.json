@@ -53,6 +53,6 @@
   "allow_reoccuring": true,
   "strength_variance": 0.25,
   "endless": false,
-  "spaced": true,
+  "spaced": false,
   "modded": false
 }
