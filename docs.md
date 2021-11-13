@@ -148,6 +148,8 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``wave_strength_steep`` - A float number which determines where the curve grows.
 * ``wave_strength_alt_mult`` - The alternate strength function's multiplier, stacked with the base strength multiplier.
 * ``wave_strength_alt_slope`` - The alternate strength function's growth amount. Higher value make the growth significantly slower.
+* ``wave_strength_tank_mult`` - The alternate tank strength function's multiplier.
+* ``wave_strength_tank_slope`` - The alternate strength function's growth amount. Higher values make the growrth significantly slower.
 * ``strength_variance`` - A range of the strength multiplied and divided by this value will be applied to the ideal strength of a subwave. A bot from templates can be chosen from within this range.
 * ``endless`` - If set to true, separate waves will instead be merged together instead of split among separate waves.
 * ``spaced`` - If set to true, the output file will be properly spaced and lined, instead of being but on 1 massive line.
