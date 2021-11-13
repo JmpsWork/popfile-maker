@@ -130,6 +130,8 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``bot_boss_custom_only`` - If only randomly generated bots should be used as bosses.
 * ``global_strength_mult`` - The global multiplier to strength when making a mission.
 * ``tank_strength_mult`` - The multiplier to individual tank strength when making a wavespawn with them.
+* ``tank_strength_bias`` - Decreases tank hp by this inverted percentage amount depending on the number of subwaves. Numbers closer to 1 decrease it more. Negative numbers increase tank hp.
+* ``tank_speeds``- The possible speeds a tank can have, each with their own weighted chance.
 * ``wavespawn_regular_weight`` - When making a subwave, this is the weight that a regular wavespawn (with only one bot type) will be chosen.
 * ``wavespawn_random_weight`` - When making a subwave, this is the weight that RandomChoice will be chosen as the spawner.
 * ``wavespawn_squad_weight`` - When making a subwave, this is the weight that Squad will be chosen as the spawner.
