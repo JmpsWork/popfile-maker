@@ -139,6 +139,8 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``wavespawn_durations`` - The possible durations a subwave can have, each with their own weighted chance.
 * ``wavespawn_ggroup_threshold`` - The minimum strength that giants require before their SpawnCount can exceed 1.
 * ``wavespawn_giant_amount`` - The possible amounts of giants in a wavespawn, each with their own weighted chance.
+* ``wavespawn_giant_spawn_decrement`` - The rate at which a giant's spawn delay decreases as strength increases.
+* ``wavespawn_giant_spawn_shift`` - The amount of strength which a giant's spawn delay reaches half its initial value.
 * ``wavespawn_amount`` - The possible amount of wavespawns each subwave can have, each with their own weighted chance.
 * ``subwave_amount`` - The possible amount of subwaves each wave can have, each with their own weighted chance.
 * ``allow_reoccuring`` - If set to true, allows randomly made bots to be used as templates for future waves.
