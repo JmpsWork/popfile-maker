@@ -4,7 +4,7 @@
     "health_giant": 1600,
     "power": 60,
     "speed": 400,
-    "power_mult_skill": [0.25, 0.85, 2, 2.5],
+    "power_mult_skill": [0.1, 0.85, 2, 2.5],
     "power_mult_weapon": [1, 1, 0.2],
     "primaries": [
       {
@@ -13,11 +13,11 @@
       },
       {
         "name": "the soda popper",
-        "weight": 10
+        "weight": 15
       },
       {
         "name": "the force-a-nature",
-        "weight": 10
+        "weight": 15
       },
       {
         "name": "baby face's blaster",
@@ -133,7 +133,8 @@
       },
       {
         "name": "the righteous bison",
-        "weight": 60
+        "weight": 60,
+        "alwaysfire": 1
       },
       {
         "name": "the reserve shooter",
@@ -209,7 +210,8 @@
       },
       {
         "name": "the dragon's fury",
-        "weight": 40
+        "weight": 40,
+        "maxvision": 850
       },
       {
         "name": "the backburner",
@@ -313,19 +315,23 @@
       },
       {
         "name": "the eyelander",
-        "weight": 30
+        "weight": 30,
+        "passive_chance": 1
       },
       {
         "name": "the persian persuader",
-        "weight": 20
+        "weight": 20,
+        "passive_chance": 1
       },
       {
         "name": "the half-zatoichi",
-        "weight": 20
+        "weight": 20,
+        "passive_chance": 1
       },
       {
         "name": "the claidheamohmor",
-        "weight": 20
+        "weight": 20,
+        "passive_chance": 1
       }
     ]
   },
@@ -334,13 +340,14 @@
     "health_giant": 5000,
     "power": 200,
     "speed": 230,
-    "power_mult_skill": [0.5, 1, 2, 2.5],
-    "power_mult_weapon": [1.5, 0.5, 0.25],
+    "power_mult_skill": [0.4, 1, 2, 2.5],
+    "power_mult_weapon": [1.25, 0.5, 0.15],
     "primaries": [
       {
         "name": "tf_weapon_minigun",
         "alt": ["iron curtain"],
-        "weight": 100
+        "weight": 100,
+        "maxvision": 1200
       },
       {
         "name": "the huo long heatmaker",
@@ -348,7 +355,8 @@
       },
       {
         "name": "the brass beast",
-        "weight": 40
+        "weight": 40,
+        "maxvision": 1200
       },
       {
         "name": "tomislav",
@@ -356,7 +364,8 @@
       },
       {
         "name": "natascha",
-        "weight": 40
+        "weight": 40,
+        "maxvision": 1200
       },
       {
         "name": "deflector",
@@ -366,11 +375,13 @@
     "secondaries": [
       {
         "name": "tf_weapon_shotgun_hwg",
-        "weight": 100
+        "weight": 100,
+        "maxvision": 1200
       },
       {
         "name": "the family business",
-        "weight": 30
+        "weight": 30,
+        "maxvision": 1200
       },
       {
         "name": "the robo-sandvich",
@@ -402,7 +413,8 @@
       },
       {
         "name": "warrior's spirit",
-        "weight": 40
+        "weight": 40,
+        "passive_chance": 1
       }
     ]
   },
@@ -531,7 +543,7 @@
       },
       {
         "name": "the huntsman",
-        "weight": 100
+        "weight": 40
       },
       {
         "name": "the machina",
@@ -539,7 +551,8 @@
       },
       {
         "name": "the bazaar bargain",
-        "weight": 20
+        "weight": 20,
+        "passive_chance": 1
       }
     ],
     "secondaries": [

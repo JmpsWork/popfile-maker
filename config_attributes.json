@@ -10,42 +10,44 @@
         "name": "fire rate bonus",
         "type": "power",
         "inverse": "fire rate penalty",
-        "operator": "inv_exp",
-        "base": 1,
+        "operator": "inv_exp_fixed",
+        "base": 1.15,
         "def": 1,
         "clamp": 0.2
     }, {
         "name": "faster reload rate",
         "type": "power",
-        "operator": "inv_exp",
-        "base": 1,
+        "operator": "inv_exp_fixed",
+        "base": 2,
         "def": 1,
-        "clamp": 0.25,
+        "clamp": 0.2,
         "alt": ["Reload time decreased", "Reload time increased", "reload time increased hidden"]
     }, {
         "name": "clip size bonus",
         "type": "power",
         "inverse": "clip size penalty",
-        "operator": "mult",
-        "base": 1,
+        "operator": "mult_add",
+        "base": 0.2,
+        "mult": 1,
         "def": 1
     }, {
         "name": "heal on hit for rapidfire",
         "type": "endurance",
-        "operator": "add",
-        "mult": 5,
+        "operator": "percentage_add",
+        "mult": 0.2,
         "def": 0,
         "alt": ["health on radius damage"]
     }, {
         "name": "heal on kill",
         "type": "endurance",
         "operator": "add",
-        "mult": 1,
+        "mult": 0.75,
         "def": 0
     }, {
         "name": "restore health on kill",
         "type": "endurance",
         "operator": "add",
+        "mult": 0.75,
         "def": 0
     }, {
         "name": "max health additive bonus",
@@ -54,28 +56,24 @@
         "operator": "add",
         "def": 0
     }, {
-        "name": "restore health on kill",
-        "type": "endurance",
-        "operator": "mult",
-        "base": 2,
-        "def": 0
-    }, {
         "name": "critboost on kill",
         "type": "power",
-        "operator": "add",
-        "mult": 25,
+        "operator": "percentage_add",
+        "base": 0.1,
+        "mult": 1,
         "def": 0
     }, {
         "name": "bullets per shot bonus",
         "type": "power",
-        "operator": "exp",
-        "base": 1.1,
+        "operator": "percentage_add",
+        "base": 0.125,
+        "mult": 1,
         "def": 1
     }, {
         "name": "mult_item_meter_charge_rate",
         "type": "power",
         "operator": "inv_exp",
-        "base": 1.3,
+        "base": 0.8,
         "def": 1,
         "clamp": 0.05,
         "alt": ["effect bar recharge rate increased"]
@@ -109,20 +107,21 @@
         "name": "Projectile speed increased",
         "type": "power",
         "inverse": "Projectile speed decreased",
-        "operator": "mult",
-        "base": 1,
+        "operator": "mult_add",
+        "base": 0.25,
         "def": 1
     }, {
         "name": "rocket specialist",
         "type": "power",
-        "operator": "mult",
-        "base": 2.5,
+        "operator": "mult_add",
+        "base": 0.5,
+        "mult": 2,
         "def": 0
     }, {
         "name": "increase buff duration",
         "type": "power",
-        "operator": "mult",
-        "base": 1,
+        "operator": "percentage_add",
+        "base": 0.2,
         "def": 1
     }, {
         "name": "weapon burn dmg increased",
@@ -145,23 +144,24 @@
         "base": 1,
         "def": 0
     }, {
-        "name": "charge duration increased",
+        "name": "charge time increased",
         "type": "power",
-        "operator": "add",
-        "base": 1,
-        "mult": 30,
+        "operator": "percentage_add",
+        "base": 0.1,
+        "mult": 1,
         "def": 0
     }, {
         "name": "charge recharge rate increased",
         "type": "power",
-        "operator": "add",
-        "mult": 30,
+        "operator": "percentage_add",
+        "base": 0.1,
+        "mult": 1,
         "def": 1
     }, {
         "name": "charge impact damage increased",
         "type": "power",
-        "operator": "mult",
-        "base": 1.25,
+        "operator": "percentage_add",
+        "base": 0.25,
         "def": 1
     }, {
         "name": "dmg taken from fire reduced",
@@ -178,8 +178,9 @@
     }, {
         "name": "lunchbox healing decreased",
         "type": "endurance",
-        "operator": "mult",
-        "base": 3,
+        "operator": "mult_add",
+        "base": 0.15,
+        "mult": 1,
         "def": 1
     }, {
         "name": "minigun sinup time increased",
@@ -191,8 +192,9 @@
     }, {
         "name": "attack projectiles",
         "type": "power",
-        "operator": "mult",
-        "base": 1.1
+        "operator": "mult_add",
+        "base": 0.5,
+        "def": 0
     }, {
         "name": "weapon spread bonus",
         "type": "power",
@@ -209,15 +211,15 @@
         "name": "Construction rate increased",
         "type": "power",
         "inverse": "Construction rate decreased",
-        "operator": "mult",
-        "base": 1.1,
+        "operator": "mult_add",
+        "base": 0.1,
         "def": 1
     }, {
         "name": "heal rate bonus",
         "type": "power",
-        "operator": "add",
-        "base": 1,
-        "mult": 20,
+        "operator": "mult_add",
+        "base": 0.1,
+        "mult": 1,
         "def": 1,
         "ca": true,
         "ceil": 50
@@ -226,13 +228,15 @@
         "type": "power",
         "operator": "mult",
         "base": 0.75,
-        "def": 1
+        "def": 1,
+        "clamp": 0.02,
+        "ceil": 25
     }, {
         "name": "uber duration bonus",
         "type": "power",
-        "operator": "add",
-        "base": 1,
-        "mult": 60,
+        "operator": "mult_add",
+        "base": 0.3,
+        "mult": 1,
         "def": 0,
         "ceil": 50
     }, {
@@ -251,23 +255,24 @@
         "name": "SRifle Charge rate increased",
         "type": "power",
         "inverse": "SRifle Charge rate decreased",
-        "operator": "mult",
-        "base": 1.2,
+        "operator": "mult_add",
+        "base": 0.2,
+        "def": 1,
         "alt": ["sniper charge per sec"]
     }, {
         "name": "move speed penalty",
         "type": "strength",
         "inverse": "move speed bonus",
         "operator": "exp",
-        "base": 1.6,
+        "base": 2,
         "def": 1,
-        "ceil": 3,
+        "ceil": 2,
         "ca": false
     }, {
         "name": "increased jump height",
         "type": "strength",
-        "operator": "mult",
-        "base": 1,
+        "operator": "mult_add",
+        "base": 0.15,
         "def": 1,
         "ca": true
     }, {
@@ -275,7 +280,7 @@
         "type": "endurance",
         "operator": "add",
         "base": 1,
-        "mult": 15,
+        "mult": 20,
         "def": 0,
         "ca": true
     }, {
@@ -289,22 +294,22 @@
         "name": "engy sentry damage bonus",
         "type": "strength",
         "operator": "exp",
-        "base": 1.5,
-        "def": 0,
+        "base": 1.25,
+        "def": 1,
         "ca": true
     }, {
         "name": "engy sentry fire rate increased",
         "type": "power",
         "operator": "inv_exp",
         "base": 2,
-        "def": 0,
+        "def": 1,
         "ca": true
     }, {
         "name": "engy sentry radius increased",
         "type": "strength",
-        "operator": "mult",
-        "base": 2,
-        "def": 0,
+        "operator": "mult_add",
+        "base": 0.5,
+        "def": 1,
         "ca": true
     }, {
         "name": "bot medic uber health threshold",
@@ -318,7 +323,7 @@
         "attributes_primary": [{
             "name": "damage bonus",
             "min": 0.5,
-            "max": 10,
+            "max": 4,
             "step": 0.25
         }, {
             "name": "fire rate bonus",
@@ -348,8 +353,13 @@
         }, {
             "name": "heal on kill",
             "min": 0,
-            "max": 20000,
+            "max": 10000,
             "step": 20
+        }, {
+            "name": "heal on hit for rapidfire",
+            "min": 0,
+            "max": 120,
+            "step": 5
         }],
         "attributes_secondary": [{
             "name": "damage bonus",
@@ -369,8 +379,8 @@
         }, {
             "name": "clip size bonus",
             "min": 0.5,
-            "max": 3,
-            "step": 0.33
+            "max": 5,
+            "step": 0.5
         }, {
             "name": "critboost on kill",
             "min": 3,
@@ -379,8 +389,13 @@
         }, {
             "name": "heal on kill",
             "min": 0,
-            "max": 20000,
+            "max": 10000,
             "step": 20
+        }, {
+            "name": "heal on hit for rapidfire",
+            "min": 0,
+            "max": 120,
+            "step": 5
         }, {
             "name": "mult_item_meter_charge_rate",
             "min": 0.25,
@@ -390,7 +405,7 @@
             "name": "applies snare effect",
             "min": 0.02,
             "max": 0.8,
-            "step": 0.05
+            "step": 0.1
         }],
         "attributes_melee": [{
             "name": "damage bonus",
@@ -538,7 +553,7 @@
         "attributes_primary": [{
             "name": "damage bonus",
             "min": 0.5,
-            "max": 15,
+            "max": 6,
             "step": 0.25
         }, {
             "name": "fire rate bonus",
@@ -547,18 +562,18 @@
             "step": 0.1
         }, {
             "name": "faster reload rate",
-            "min": 0.05,
+            "min": 0.1,
             "max": 2,
             "step": 0.05
         }, {
             "name": "clip size bonus",
-            "min": 1,
+            "min": 0.5,
             "max": 6,
             "step": 0.5
         }, {
             "name": "heal on hit for rapidfire",
             "min": 0,
-            "max": 20000,
+            "max": 2000,
             "step": 20
         }, {
             "name": "heal on kill",
@@ -568,8 +583,8 @@
         }, {
             "name": "Blast radius increased",
             "min": 1,
-            "max": 2.5,
-            "step": 0.1
+            "max": 2,
+            "step": 0.2
         }, {
             "name": "Projectile speed increased",
             "min": 0.5,
@@ -584,7 +599,7 @@
         "attributes_secondary": [{
             "name": "damage bonus",
             "min": 0.5,
-            "max": 10,
+            "max": 5,
             "step": 0.25
         }, {
             "name": "fire rate bonus",
@@ -648,7 +663,7 @@
                 "whitelist": ["increase buff duration"]
             },
             "the battalion's backup": {
-                "power_base": 80,
+                "power_base": 100,
                 "default": {
                     "max health additive bonus": 20
                 },
@@ -663,7 +678,7 @@
                 "whitelist": []
             },
             "the mantreads": {
-                "power_add": 0,
+                "power_add": 5,
                 "whitelist": []
             },
             "the direct hit": {
@@ -693,12 +708,16 @@
             },
             "the escape plan": {},
             "the equalizer": {},
-            "tf_weapon_rocketlauncher": {},
+            "tf_weapon_rocketlauncher": {
+                "priority": ["faster reload rate", "damage bonus"]
+            },
             "the original": {
                 "whitelist_extend": ["Blast radius increased", "Projectile speed increased"],
                 "priority": ["damage bonus", "fire rate penalty"]
             },
-            "the cow mangler 5000": {},
+            "the cow mangler 5000": {
+                "priority": ["faster reload rate"]
+            },
             "tf_weapon_shotgun_soldier": {},
             "the righteous bison": {},
             "the reserve shooter": {
@@ -712,22 +731,27 @@
         "attributes_primary": [{
             "name": "damage bonus",
             "min": 0.5,
-            "max": 15,
+            "max": 5,
             "step": 0.25
         }, {
             "name": "heal on hit for rapidfire",
             "min": 0,
-            "max": 80,
+            "max": 60,
             "step": 2
+        }, {
+            "name": "heal on kill",
+            "min": 0,
+            "max": 10000,
+            "step": 100
         }, {
             "name": "weapon burn dmg increased",
             "min": 1,
-            "max": 30,
-            "step": 20
+            "max": 6,
+            "step": 0.25
         }, {
             "name": "move speed bonus",
             "min": 1,
-            "max": 2,
+            "max": 1.5,
             "step": 0.1
         }],
         "attributes_secondary": [{
@@ -749,7 +773,7 @@
             "name": "clip size bonus",
             "min": 0.5,
             "max": 3,
-            "step": 0.33
+            "step": 0.5
         }, {
             "name": "heal on kill",
             "min": 0,
@@ -758,8 +782,8 @@
         }, {
             "name": "weapon burn dmg increased",
             "min": 1,
-            "max": 30,
-            "step": 20
+            "max": 6,
+            "step": 0.25
         }, {
             "name": "crit vs burning players",
             "min": 0,
@@ -816,13 +840,15 @@
                 },
                 "whitelist_extend": ["move speed bonus"]
             },
-            "the dragon's fury": {},
+            "the dragon's fury": {
+                "whitelist": ["damage bonus", "crit vs burning players", "heal on kill", "heal on hit for rapidfire"]
+            },
             "the backburner": {},
             "the phlogistinator": {
                 "whitelist_extend": ["move speed bonus"]
             },
             "tf_weapon_shotgun_pyro": {
-                "whitelist_extend": ["clip size bonus"]
+                "whitelist_extend": ["faster reload rate", "clip size bonus"]
             },
             "the scorch shot": {
                 "default": {
@@ -839,16 +865,16 @@
         "attributes_primary": [{
             "name": "damage bonus",
             "min": 0.5,
-            "max": 15,
+            "max": 6,
             "step": 0.25
         }, {
             "name": "fire rate bonus",
             "min": 0.1,
-            "max": 3.5,
+            "max": 2,
             "step": 0.05
         }, {
             "name": "faster reload rate",
-            "min": 0.05,
+            "min": 0.1,
             "max": 2,
             "step": 0.1
         }, {
@@ -864,7 +890,7 @@
         }, {
             "name": "Blast radius increased",
             "min": 1,
-            "max": 2.5,
+            "max": 2,
             "step": 0.1
         }, {
             "name": "Projectile speed increased",
@@ -875,7 +901,7 @@
         "attributes_secondary": [{
             "name": "damage bonus",
             "min": 0.5,
-            "max": 10,
+            "max": 6,
             "step": 0.25
         }, {
             "name": "fire rate bonus",
@@ -890,15 +916,15 @@
         }, {
             "name": "clip size bonus",
             "min": 0.5,
-            "max": 3,
-            "step": 0.33
+            "max": 6,
+            "step": 0.5
         }, {
             "name": "heal on kill",
             "min": 0,
             "max": 20000,
             "step": 20
         }, {
-            "name": "charge duration increased",
+            "name": "charge time increased",
             "min": 0,
             "max": 8,
             "step": 1
@@ -910,7 +936,7 @@
         }, {
             "name": "charge impact damage increased",
             "min": 1,
-            "max": 11,
+            "max": 6,
             "step": 0.5
         }],
         "attributes_melee": [{
@@ -921,7 +947,7 @@
         }, {
             "name": "heal on hit for rapidfire",
             "min": 0,
-            "max": 20000,
+            "max": 500,
             "step": 20
         }, {
             "name": "melee attack rate bonus",
@@ -942,11 +968,11 @@
             "name": "restore health on kill",
             "min": 0,
             "max": 100,
-            "step": 5
+            "step": 10
         }, {
             "name": "move speed bonus",
             "min": 1,
-            "max": 2,
+            "max": 1.5,
             "step": 0.1
         }, {
             "name": "increased jump height",
@@ -964,7 +990,7 @@
                     "dmg taken from fire reduced": 0.85,
                     "dmg taken from blast reduced": 0.85
                 },
-                "whitelist": ["charge duration increased", "charge recharge rate increased", "charge impact damage increased"]
+                "whitelist": ["charge time increased", "charge recharge rate increased", "charge impact damage increased"]
             },
             "tf_weapon_bottle": {},
             "the chargin' targe": {
@@ -973,7 +999,7 @@
                     "dmg taken from fire reduced": 0.5,
                     "dmg taken from blast reduced": 0.7
                 },
-                "whitelist": ["charge duration increased", "charge recharge rate increased", "charge impact damage increased"]
+                "whitelist": ["charge time increased", "charge recharge rate increased", "charge impact damage increased"]
             },
             "the splendid screen": {
                 "power_base": 30,
@@ -983,7 +1009,7 @@
                     "dmg taken from fire reduced": 0.8,
                     "dmg taken from blast reduced": 0.8
                 },
-                "whitelist": ["charge duration increased", "charge recharge rate increased", "charge impact damage increased"]
+                "whitelist": ["charge time increased", "charge recharge rate increased", "charge impact damage increased"]
             },
             "the eyelander": {
                 "default": {
@@ -1000,9 +1026,11 @@
                 "whitelist_extend": ["move speed bonus"],
                 "priority": ["critboost on kill", "damage bonus", "move speed bonus"]
             },
-            "tf_weapon_grenadelauncher": {},
+            "tf_weapon_grenadelauncher": {
+                "whitelist_extend": ["Projectile speed increased"]
+            },
             "the bootlegger": {
-                "power_base": 0,
+                "power_base": 1,
                 "default": {
                     "max health additive bonus": 25
                 },
@@ -1011,16 +1039,19 @@
             "tf_weapon_pipebomblauncher": {
                 "default_add": {
                     "stickybomb charge rate": 0.001,
-                    "max pipebombs decreased": -7,
+                    "max pipebombs decreased": -6,
                     "projectile range increased": 0.35
-                }
+                },
+                "priority": ["faster reload rate"]
             },
             "the iron bomber": {
                 "default": {
                     "Blast radius decreased": 0.85,
                     "grenade no bounce": 1,
                     "fuse bonus": 0.7
-                }
+                },
+                "whitelist_extend": ["Blast radius increased"],
+                "priority": ["faster reload rate"]
             },
             "the loch-n-load": {
                 "default": {
@@ -1036,7 +1067,7 @@
         "attributes_primary": [{
             "name": "damage bonus",
             "min": 0.5,
-            "max": 5,
+            "max": 3,
             "step": 0.25
         }, {
             "name": "fire rate bonus",
@@ -1067,7 +1098,7 @@
         "attributes_secondary": [{
             "name": "damage bonus",
             "min": 0.5,
-            "max": 10,
+            "max": 5,
             "step": 0.25
         }, {
             "name": "fire rate bonus",
@@ -1082,8 +1113,8 @@
         }, {
             "name": "clip size bonus",
             "min": 0.5,
-            "max": 3,
-            "step": 0.33
+            "max": 5,
+            "step": 0.5
         }, {
             "name": "heal on kill",
             "min": 0,
@@ -1091,14 +1122,14 @@
             "step": 20
         }, {
             "name": "mult_item_meter_charge_rate",
-            "min": 0.25,
-            "max": 3,
+            "min": 0.5,
+            "max": 1,
             "step": 0.25
         }, {
             "name": "lunchbox healing decreased",
-            "min": 1,
+            "min": 2,
             "max": 100,
-            "step": 1
+            "step": 2
         }],
         "attributes_melee": [{
             "name": "damage bonus",
@@ -1108,7 +1139,7 @@
         }, {
             "name": "heal on hit for rapidfire",
             "min": 0,
-            "max": 20000,
+            "max": 1000,
             "step": 20
         }, {
             "name": "melee attack rate bonus",
@@ -1123,7 +1154,7 @@
         }, {
             "name": "heal on kill",
             "min": 0,
-            "max": 20000,
+            "max": 10000,
             "step": 20
         }, {
             "name": "restore health on kill",
@@ -1241,7 +1272,7 @@
         "attributes_primary": [{
             "name": "damage bonus",
             "min": 0.5,
-            "max": 10,
+            "max": 5,
             "step": 0.25
         }, {
             "name": "fire rate bonus",
@@ -1256,8 +1287,8 @@
         }, {
             "name": "clip size bonus",
             "min": 0.5,
-            "max": 3,
-            "step": 0.33
+            "max": 5,
+            "step": 0.5
         }, {
             "name": "critboost on kill",
             "min": 3,
@@ -1267,7 +1298,7 @@
         "attributes_secondary": [{
             "name": "damage bonus",
             "min": 0.5,
-            "max": 10,
+            "max": 5,
             "step": 0.25
         }, {
             "name": "fire rate bonus",
@@ -1283,7 +1314,7 @@
             "name": "clip size bonus",
             "min": 0.5,
             "max": 3,
-            "step": 0.33
+            "step": 0.5
         }, {
             "name": "heal on kill",
             "min": 0,
@@ -1292,7 +1323,7 @@
         }, {
             "name": "dmg penalty vs players",
             "min": 1,
-            "max": 10,
+            "max": 8,
             "step": 1
         }, {
             "name": "critboost on kill",
@@ -1348,22 +1379,28 @@
         }, {
             "name": "move speed bonus",
             "min": 1,
-            "max": 2.5,
+            "max": 2,
             "step": 0.25
         }, {
             "name": "health regen",
             "min": 0,
             "max": 100,
             "step": 10
+        }, {
+            "name": "max health additive bonus",
+            "min": 0,
+            "max": 175,
+            "step": 25
         }],
         "whitelist_primary": ["damage bonus", "fire rate bonus", "faster reload rate", "clip size bonus"],
         "whitelist_secondary": ["damage bonus", "clip size bonus", "fire rate penalty", "faster reload rate", "critboost on kill"],
-        "whitelist_melee": ["damage bonus", "melee attack rate bonus", "critboost on kill", "health regen"],
+        "whitelist_melee": ["damage bonus", "melee attack rate bonus", "critboost on kill", "health regen", "max health additive bonus"],
         "items": {
             "the frontier justice": {
                 "default": {
                     "clip size penalty": 0.5
-                }
+                },
+                "priority": ["faster reload rate"]
             },
             "the short circuit": {
                 "whitelist": ["fire rate bonus", "dmg penalty vs players"]
@@ -1392,7 +1429,9 @@
                 },
                 "whitelist_extend": ["engy sentry damage bonus", "engy sentry fire rate increased", "engy sentry radius increased", "move speed bonus"]
             },
-            "tf_weapon_shotgun_primary": {},
+            "tf_weapon_shotgun_primary": {
+                "priority": ["faster reload rate"]
+            },
             "the widowmaker": {
                 "whitelist": ["damage bonus", "fire rate bonus", "critboost on kill"]
             }
@@ -1402,7 +1441,7 @@
         "attributes_primary": [{
             "name": "damage bonus",
             "min": 0.5,
-            "max": 15,
+            "max": 4,
             "step": 0.25
         }, {
             "name": "fire rate bonus",
@@ -1418,11 +1457,11 @@
             "name": "clip size bonus",
             "min": 1,
             "max": 6,
-            "step": 0.33
+            "step": 0.5
         }, {
             "name": "heal on hit for rapidfire",
             "min": 0,
-            "max": 20000,
+            "max": 1000,
             "step": 20
         }, {
             "name": "heal on kill",
@@ -1469,8 +1508,8 @@
         }, {
             "name": "heal on kill",
             "min": 0,
-            "max": 0,
-            "step": 1
+            "max": 10000,
+            "step": 100
         }, {
             "name": "melee attack rate bonus",
             "min": 0.25,
@@ -1489,7 +1528,7 @@
         }, {
             "name": "heal on hit for rapidfire",
             "min": 0,
-            "max": 20000,
+            "max": 1000,
             "step": 20
         }, {
             "name": "move speed bonus",
@@ -1497,30 +1536,33 @@
             "max": 2.5,
             "step": 0.25
         }],
-        "whitelist_primary": ["damage bonus", "fire rate bonus", "faster reload rate", "clip size bonus", "heal on hit for rapidfire", "move speed bonus"],
+        "whitelist_primary": ["damage bonus", "fire rate bonus", "clip size bonus", "heal on hit for rapidfire", "move speed bonus"],
         "whitelist_secondary": ["heal rate bonus", "ubercharge rate bonus", "uber duration bonus", "overheal bonus"],
         "whitelist_melee": ["damage bonus", "melee attack rate bonus", "critboost on kill", "critboost on kill", "move speed bonus"],
         "items": {
-            "the crusader's crossbow": {},
+            "the crusader's crossbow": {
+                "whitelist_extend": ["faster reload rate"],
+                "priority": ["faster reload rate"]
+            },
             "the blutsauger": {
                 "default": {
                     "heal on hit for rapidfire": 3
                 }
             },
-            "tf_weapon_medigun": {
-                "priority": ["heal rate bonus"]
-            },
+            "tf_weapon_medigun": {},
             "the quick-fix": {
                 "priority": ["heal rate bonus"]
             },
             "the kritzkrieg": {
-                "priority": ["heal rate bonus","ubercharge rate bonus"],
+                "priority": ["ubercharge rate bonus"],
                 "default_add": {
                     "bot medic uber health threshold": 999999
                 }
             },
             "tf_weapon_bonesaw": {},
-            "tf_weapon_syringegun": {}
+            "tf_weapon_syringegun": {
+                "priority": ["fire rate bonus", "clip size bonus"]
+            }
         }
     },
     "sniper": {
@@ -1559,11 +1601,16 @@
             "min": 0,
             "max": 4,
             "step": 1
+        },{
+            "name": "health regen",
+            "min": 0,
+            "max": 100,
+            "step": 5
         }],
         "attributes_secondary": [{
             "name": "damage bonus",
             "min": 0.5,
-            "max": 10,
+            "max": 6,
             "step": 0.25
         }, {
             "name": "fire rate bonus",
@@ -1579,7 +1626,7 @@
             "name": "clip size bonus",
             "min": 0.5,
             "max": 3,
-            "step": 0.33
+            "step": 0.25
         }, {
             "name": "critboost on kill",
             "min": 3,
@@ -1718,7 +1765,7 @@
             "name": "clip size bonus",
             "min": 1,
             "max": 6,
-            "step": 0.33
+            "step": 0.25
         }, {
             "name": "heal on kill",
             "min": 0,
@@ -1760,18 +1807,27 @@
             "name": "health regen",
             "min": 0,
             "max": 100,
-            "step": 10
+            "step": 5
+        }, {
+            "name": "max health additive bonus",
+            "min": 0,
+            "max": 125,
+            "step": 25
         }],
         "whitelist_primary": ["damage bonus", "fire rate bonus", "faster reload rate", "clip size bonus", "heal on kill"],
         "whitelist_secondary": [],
-        "whitelist_melee": ["melee attack rate bonus", "health regen", "critboost on kill", "move speed bonus"],
+        "whitelist_melee": ["melee attack rate bonus", "health regen", "move speed bonus", "max health additive bonus"],
         "items": {
             "the enforcer": {},
             "the diamondback": {},
             "tf_weapon_knife": {},
             "tf_weapon_sapper": {},
-            "the big earner": {},
-            "conniver's kunai": {},
+            "the big earner": {
+                "whitelist_extend": ["health regen"]
+            },
+            "conniver's kunai": {
+                "whitelist_extend": ["health regen"]
+            },
             "your eternal reward": {},
             "tf_weapon_revolver": {}
         }

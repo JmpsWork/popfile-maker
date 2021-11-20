@@ -1,17 +1,18 @@
 {
   "pattern": {
     "every": {
-      "3": {"conds": {"starting_from": 10}, "rules": {"power_mult_max": 1.2}},
+      "3": {"conds": {"starting_from": 3}, "rules": {"power_mult_max": 1.2}},
       "7": {"rules": {"must_include": ["boss"]}}
     },
     "range": [
-      [1, 2, {"no": ["tank"]}],
-      [1, 6, {"no": ["boss"]}],
-      [1, 8, {"support_allowed": true}]
+      [1, 1, {"no": ["tank"]}],
+      [1, 5, {"no": ["boss"]}],
+      [1, 30, {"support_allowed": true}]
     ]
   },
   "individual": {
     "1": {"subwaves": 2},
+    "2": {"subwaves": 3, "support_allowed": true},
     "6": {"custom_only": true, "subwaves": 4, "support_allowed": true},
     "7": {"subwaves": 4, "support_allowed": true}
   }
