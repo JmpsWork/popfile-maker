@@ -1,31 +1,18 @@
-"""This file contains the AI which constructs the waves themselves,
-along with any custom bots that need to be created.
+"""
+This file contains the AI which constructs and coordinates missions and their elements together.
+Comes with a lot of utility and secondary functions to aid in this goal.
 
-Uses:
+Can be customized using one of the many config files available.
+- config_ai.json
 - config_attributes.json
+- config_classes.json
+- config_map.json
 - config_waves.json
-
-As rules to follow when creating waves and bots.
 """
-
-"""
-HOW THE COORDINATOR THINKS
-
-The AI - codenamed Coordinator, is responsible for making sure waves follow
-a consistent difficulty curve, along with choosing the right bots
-to ensure every wave doesn't get boring.
-
-The main thing that is considered is the strength of a wave,
-calculated from the current money players have, along with a multiplier to that value.
-
-
-"""
-
-# PROBLEM
-# PYRO secondaries like flare gun crash the ai!
 
 
 from popparser import *
+from func_extras import colored_text
 import json
 import random
 import os
@@ -73,12 +60,13 @@ def apply_attribute_values(define: dict, value: float, strength, power, enduranc
     elif ceil_clamp:
         value = value if value < ceil_clamp else ceil_clamp
 
+    default = define.get('def', 1)
     if mod_type == 'power':
-        power = operator(define.get('operator', 'none'), value, define.get('base', 1), power, define.get('mult', 1))
+        power = operator(define.get('operator', 'none'), value, define.get('base', 1), power, define.get('mult', 1), default)
     elif mod_type == 'endurance':
-        endurance = operator(define.get('operator', 'none'), value, define.get('base', 1), endurance, define.get('mult', 1))
+        endurance = operator(define.get('operator', 'none'), value, define.get('base', 1), endurance, define.get('mult', 1), default)
     elif mod_type == 'strength':
-        strength = operator(define.get('operator', 'none'), value, define.get('base', 1), strength, define.get('mult', 1))
+        strength = operator(define.get('operator', 'none'), value, define.get('base', 1), strength, define.get('mult', 1), default)
     return float(strength), float(power), float(endurance)
 
 
@@ -96,9 +84,6 @@ def assign_attributes(tfbot_class: str, weapon: str, strength: float, s_attribut
         if a in attributes:  # If this priority attribute is the same as this regular one
             attributes.remove(a)
 
-    random.shuffle(attributes)
-    # print(attributes, priority, weapon)
-
     if len(attributes) + len(priority) < amount:  # Avoid infinite loop
         used_attributes.extend(priority)
         used_attributes.extend(attributes)
@@ -112,7 +97,8 @@ def assign_attributes(tfbot_class: str, weapon: str, strength: float, s_attribut
                 attributes.remove(chosen)
             used_attributes.append(chosen)
             amount -= 1
-    # print(used_attributes)
+    # Increase variety of attributes
+    random.shuffle(used_attributes)
 
     # Reduce amount variable down to the lengths of used attribute if necessary
 
@@ -123,14 +109,11 @@ def assign_attributes(tfbot_class: str, weapon: str, strength: float, s_attribut
         if attr:
             attr_info = all_attributes[attr[1]]
             op = attr_info.get('operator', 'none')
-            if op in ['exp', 'inv_exp', 'mult']:
+            if op in ['exp', 'inv_exp', 'mult', 'inv_exp_fixed']:
                 mults.append(attr_info)
-            elif op in ['add']:
+            elif op in ['add', 'mult_add', 'percentage_add']:
                 adders.append(attr_info)
 
-    # Imagine the equation:
-    # 175 + ( a_(n) + a_(n-1)... ) * ( a_(n-2) * a_(n-3)... ) = strength
-    # Start by assigning values to the adders
     base_power = all_classes[tfbot_class].get('power', 100)
     weapon_info = get_weapon_info(tfbot_class, weapon)
     if weapon_info[0].get('base_power', False):
@@ -142,54 +125,64 @@ def assign_attributes(tfbot_class: str, weapon: str, strength: float, s_attribut
 
     # Add any additional default attributes for an item that aren't present in vanilla default
     weapon_attributes = weapons_info[tfbot_class]['items'][weapon].get('default_add', {})
-    final_attributes.update(weapon_attributes)
 
-    # PROBLEM - Sometimes attribute values that decrease strength will be chosen over ones that increase strength!
-    # Do adders first, the mults second
+    # Find an approximate strength value we want per attribute.
+    # The lower the attribute count, the higher the strength per attribute should be.
+    # Then, find the original value that comes closest to that attribute strength value.
+
+    # Do adders first, then mults second
+    if attribute_amount != 0:
+        strength_per_adder = abs(strength / attribute_amount - base_power)
+        strength_per_mult = abs(strength / attribute_amount - base_power)
+    else:
+        strength_per_adder, strength_per_mult = 0, 0
+
     for add in adders:
         possible_values = get_attribute_ranges(tfbot_class, add.get('name'), weapon_info[0].get('name'))
+        default = add.get('def', 0)
         if possible_values is False:
-            print(f'Unknown attribute {add.get("name")} for class "{tfbot_class}"! Attribute skipped.')
+            print(colored_text(f'Unknown attribute "{add.get("name")}" for class "{tfbot_class}"! Attribute skipped.', 93))
             continue
-        strength_values = list(map(lambda x: operator(add.get('operator', 'none'), x, add.get('base', 1), base_power, add.get('mult', 1)), possible_values))
-        possible_strength_values = [abs(p - strength / attribute_amount) for p in strength_values]
+        strength_values = list(map(lambda x: operator(add.get('operator', 'none'), x, add.get('base', 1), strength_per_adder, add.get('mult', 1), default), possible_values))
+        possible_strength_values = [abs(p - strength) for p in strength_values]
         if ai_info['bot_deviance_max'] > deviance_amount and ai_info['bot_deviance_chance'] > random.uniform(0, 1) and attribute_amount != 1:
-            possible_strength_values = [p - strength / attribute_amount for p in strength_values]
-            # index = random.randrange(0, len(possible_strength_values))
+            possible_strength_values = [p - strength for p in strength_values]
             v, index = min_index(possible_strength_values)
-            # v = possible_values[index]
             deviance_amount += 1
+            strength_per_adder += strength / len(used_attributes)
         else:
             v, index = min_index(possible_strength_values)
 
         value = possible_values[index]
-        base_power += operator(add.get('operator', 'none'), value, add.get('base', 1), base_power, add.get('mult', 1))
         attribute_amount -= 1
         final_attributes[add.get('name')] = value
 
     for mult in mults:
-        possible_values = get_attribute_ranges(tfbot_class, mult.get('name'), weapon_info[0].get('name'))
-        if possible_values is False:
-            print(f'Unknown attribute "{mult.get("name")}" for class "{tfbot_class}"! Attribute skipped.')
-            continue
-        strength_values = list(map(lambda x: operator(mult.get('operator', 'none'), x, mult.get('base', 1), base_power, mult.get('mult', 1)), possible_values))
-        possible_strength_values = [abs(p - strength / attribute_amount) for p in strength_values]
         # Get the value which has the closest approximation to the strength of the bot
+        possible_values = get_attribute_ranges(tfbot_class, mult.get('name'), weapon_info[0].get('name'))
+        default = mult.get('def', 1)
+        # If the attribute doesn't exist, throw a warning and skip it
+        if possible_values is False:
+            print(colored_text(f'Unknown attribute "{mult.get("name")}" for class "{tfbot_class}"! Attribute skipped.', 93))
+            continue
+        # Calculate the strength for each value, and then the closest approximation to our desired strength
+        strength_values = list(map(lambda x: operator(mult.get('operator', 'none'), x, mult.get('base', 1), strength_per_mult, mult.get('mult', 1), default), possible_values))
+        possible_strength_values = [abs(p - strength) for p in strength_values]
         if ai_info['bot_deviance_max'] > deviance_amount and ai_info['bot_deviance_chance'] > random.uniform(0, 1) and attribute_amount != 1:
             # Bot deviance tells it to pick a random attribute index instead of the normal min-maxed one
-            possible_strength_values = [p - strength / attribute_amount for p in strength_values]
-            # index = random.randrange(0, len(possible_strength_values))
+            possible_strength_values = [p - strength for p in strength_values]
             v, index = min_index(possible_strength_values)
-            # v = min(possible_strength_values)  # Completion
             deviance_amount += 1
+            # Upgrade next attribute to compensate
+            strength_per_mult += strength / len(used_attributes)
         else:
             v, index = min_index(possible_strength_values)
+        # Add the value and attribute to all attributes
         value = possible_values[index]
-
-        base_power = operator(mult.get('operator', 'none'), value, mult.get('base', 1), base_power, mult.get('mult', 1))
         attribute_amount -= 1
         final_attributes[mult.get('name')] = value
 
+    final_attributes.update(weapon_attributes)
     return final_attributes
 
 
@@ -254,18 +247,36 @@ def min_index(array: list):
     return min_value, index
 
 
-def operator(kind: str, value: float, base: int, final: float, mult: float=1) -> float:
+def operator(kind: str, value: float, base: int, final: float, mult: float=1, default: float=1) -> float:
     """Returns final, modified by the operator kind using the value, base and mult."""
     if kind == 'exp':
         return final * (mult*(base**(value - 1)))
     elif kind == 'inv_exp':
-        return final * (base / value)
+        return final * (base / value) * mult
+    elif kind == 'inv_exp_fixed':
+        # Keeps the default value always equal to 1
+        # Base must ALWAYS be equal to or greater than the default
+        return final * ((1 / (base * value)) + ((base - 1) / default / base))
     elif kind == 'mult':
         return final * (base * value)
+    elif kind == 'percentage_add':
+        # Adds a percentage of the current strength to the strength
+        # Very similar to mult_add
+        return final + (final * mult * (value - default) * base + default)
+    elif kind == 'mult_add':
+        # Multiplies by smaller steps, while keeping the default value normal
+        # Base must ALWAYS be equal to or less than the defaul1
+        return mult * (final + (value - default) * base + default)
     elif kind == 'add':
         return final + value * mult
     else:
         return final
+
+
+def odds_value(value: float, slope: float, shift: float) -> float:
+    """Customizable sigmoid function. Input is value,
+    slope is how quickly values go from 0 to 1 and shift is how far the midpoint is from 0."""
+    return (math.exp(slope * (value - shift))) / (1 + math.exp(slope * (value - shift)))
 
 
 def quotify(string: str) -> str:
@@ -312,6 +323,8 @@ class Coordinator:
         self.bot_templates_strengths = []
         # Used bot template names for this wave. Gets cleared at the end of every wave
         self.bot_templates_used = []
+        # Final tank to give Skin 1 to
+        self.final_tank = False
 
     def create_mission(self, name: str):
         """Create an entire mission from scratch, using the config from ai_config.json"""
@@ -327,6 +340,7 @@ class Coordinator:
         self.bot_templates_new = []
         self.get_templates()
         self.bot_templates_used = []
+        self.final_tank = False
 
         desired_waves = ai_info['max_waves'] + 1
         waveschedule = WaveSchedule('WaveSchedule', [])
@@ -335,7 +349,7 @@ class Coordinator:
         mission_sentry = Mission('Mission', [])
         mission_sentry.set_kv('Objective', 'DestroySentries')
         mission_sentry.set_kv('InitialCooldown', 15)
-        mission_sentry.set_kv('CooldownTime', 38)
+        mission_sentry.set_kv('CooldownTime', 40)
         mission_sentry.set_kv('BeginAtWave', 1)
         mission_sentry.set_kv('RunForThisManyWaves', 999)
         mission_sentry.set_kv('Where', weighted_random(map_info['spawn_giant']))
@@ -378,15 +392,14 @@ class Coordinator:
                             wavespawn.set_kv('WaitForAllDead', f'w{self.current_wave}_{i - 1}')
                         elif i != 0 and tank_used:
                             wavespawn.set_kv('WaitForAllSpawned', f'w{self.current_wave}_{i - 1}')
-                            tank_used = False
                         wavespawn.set_kv('Name', f'w{self.current_wave}_{i}')
                         new_wave.wavespawns.append(wavespawn)
                         new_wave.all_subtrees.append(wavespawn)
                 all_waves.append(new_wave)
                 for s in support:
                     all_mission_support.append(s)
+            print(colored_text(f'Wave {self.current_wave} Strength: {self.wave_strength()}, Current Cash: {self.total_currency}, Wave Cash: {money * self.current_wave_rules["cash_mult"]}', 34))
             self.current_wave += 1
-            print(f'Wave Strength: {self.wave_strength()}, Wave Cash: {money * self.current_wave_rules["cash_mult"]} Current Cash: {self.total_currency}')
             self.total_currency += money * self.current_wave_rules['cash_mult'] + self.current_wave_rules['cash_add']
 
         if not ai_info['endless']:
@@ -444,6 +457,10 @@ class Coordinator:
         waveschedule.templates.append(new_templates)
         waveschedule.all_subtrees.append(new_templates)
 
+        # Modify remaining stuff
+        if isinstance(self.final_tank, Tank):
+            self.final_tank.set_kv('Skin', 1)
+
         # Add included template files
         final = '// Made using JMP\'s custom mission generator.\n'
         template_files = os.listdir('templates')
@@ -455,6 +472,7 @@ class Coordinator:
             final += waveschedule.string_spaced()
         with open(f'{map_info["name"]}_{name}.pop', 'w') as m:
             m.write(final)
+        print(colored_text('Mission successfully finished.', 96))
 
     def create_wave(self, money: int=600):
         """Create a wave using the current wave number.
@@ -540,6 +558,7 @@ class Coordinator:
         strength_per = strength / wavespawn_amount
         # total_max_bots is used to determine what bot slots are already occupied
         total_max_bots = slot_restrict
+        total_wavespawns = wavespawn_amount
         # Weights for the "duration" of this subwave section, which are consistent over every wavespawn
         total_groups = weighted_random({int(k): v for k, v in ai_info['wavespawn_durations'].items()})
         created_wavespawns = []
@@ -547,6 +566,7 @@ class Coordinator:
         wavespawn_stream_made = False
         money_amounts = list(float_range(10, money, 10))
         used = []
+        used_tanks = 0
         while wavespawn_amount > 0:
             # Determine currency
             ideal_money = money / wavespawn_amount
@@ -591,8 +611,7 @@ class Coordinator:
                 spawncount, maxactive, totalcount = 1, 1, 1
             elif chosen == 'giant':
                 # Giants spawn much less than commons
-                # Also prevent giant med squads from showing up early or with giant scouts
-                if ai_info['wavespawn_gsquad_threshold'] > strength_per or chosen == 'scout':
+                if ai_info['wavespawn_gsquad_threshold'] > strength_per:
                     wavespawn_kind = 'regular'
 
                 if wavespawn_kind == 'squad':
@@ -602,7 +621,9 @@ class Coordinator:
                         chosen_amount = int(weighted_random(ai_info['wavespawn_giant_amount']))
                     else:
                         chosen_amount = 1
-                    spawncount, maxactive, totalcount = chosen_amount, chosen_amount * random.randrange(1, 3), chosen_amount * total_groups
+                    spawncount, maxactive, totalcount = chosen_amount, chosen_amount * random.randint(2, 3), chosen_amount * total_groups
+                    if total_wavespawns == 1:
+                        maxactive *= 2
             else:
                 if wavespawn_kind == 'squad':
                     spawncount = 2
@@ -615,7 +636,11 @@ class Coordinator:
                         wavespawn_stream_made = True
                     else:
                         spawncount = random.randrange(1, maxactive)
+                    # Make the totalcount a multiple of spawncount
                     totalcount = maxactive * total_groups
+                    rem = totalcount % spawncount
+                    if rem != 0:
+                        totalcount += spawncount - rem
             # Determine the spawning behavior (WaitBetweenSpawns)
             """Spawning times (WaitBetweenSpawns) are very difficult to determine due to how strength and bot type
             correlate to the time between each spawning. Almost any combo can work and can't work at the same time.
@@ -623,27 +648,36 @@ class Coordinator:
             - Bosses and Tanks only spawn in 1 group, and thus don't apply.
             - Giants spawn more frequently as the strength of the subwave goes up.
             - Commons spawn based on how big their maxactive count is. (the higher MaxActive is, the higher WaitBetweenSpawns is)"""
+
             if chosen == 'boss' or chosen == 'tank':
                 # Spawning delay doesn't matter for tanks or bosses
                 waitbetweenspawns = 1
-            elif wavespawn_amount == 1 and chosen == 'giant':
+            elif wavespawn_amount == 1:
                 # Create stream wavespawn
-                waitbetweenspawns = spawncount * 4
+                if chosen == 'giant':
+                    # Reduce giant spawn time as strength goes up
+                    waitbetweenspawns = math.ceil(spawncount * 5 * odds_value(strength_per, -ai_info['wavespawn_giant_spawn_decrement'], ai_info['wavespawn_giant_spawn_shift']))
+                else:
+                    waitbetweenspawns = spawncount // 2
             else:
                 if chosen == 'giant':
-                    waitbetweenspawns = spawncount * 6
+                    waitbetweenspawns = math.ceil(spawncount * 8 * odds_value(strength_per, -ai_info['wavespawn_giant_spawn_decrement'], ai_info['wavespawn_giant_spawn_shift']))
                 else:
                     waitbetweenspawns = spawncount
             if wavespawn_kind == 'squad' and chosen != 'giant':
                 waitbetweenspawns //= 2
 
             # Completion
-            waitbeforestarting = random.randrange(1, 6)
+            if chosen == 'tank':
+                waitbeforestarting = random.randint(5, 8) + (14 * used_tanks)
+                used_tanks += 1
+            else:
+                waitbeforestarting = random.randint(1, 6)
 
             # Determine the spawner (aka robots) to use
             # As the spawncount goes up, the strength per tfbot goes down
-            # print(f'Base strength per tfbot: {strength_per}, Modified: {(strength_per / spawncount * math.log(spawncount + 1, ai_info["bot_group_power"]))}')
-            tfbot_strength = strength_per / maxactive * spawncount
+            tfbot_strength = strength_per / math.ceil(maxactive * 0.5) * math.ceil(spawncount * 0.5)
+            # print(f'Strength: {tfbot_strength}, MaxActive: {maxactive}, SpawnCount: {spawncount}')
             if chosen == 'boss':
                 tfbot_strength *= ai_info['bot_boss_strength_mult']
             # print(f'TFBot strength: {tfbot_strength}, Max and total: {maxactive}, {totalcount}')
@@ -660,10 +694,17 @@ class Coordinator:
                 else:
                     spawner = self.create_tfbot(strength=strength_per, tfbot_kind=chosen, restriction=random.randrange(0, 2))
             elif chosen == 'tank':
-                # Tank strength too low per wavespawn, so it's per subwave instead
-                spawner = self.create_tank(strength=strength * ai_info['tank_strength_mult'], speed=75)
+                # Tank strength is per subwave modified by the amount of wavespawns in the subwave
+                # The more tanks there are in a subwave, each future tank has less and less HP
+                bias = (1 - total_wavespawns * ai_info['tank_strength_bias'])
+                tank_strength = self.wave_tank_strength(divisor=used_tanks) * bias
+                tank_speed = int(weighted_random(ai_info['tank_speeds']))
+                spawner = self.create_tank(strength=tank_strength, speed=tank_speed)
+                self.final_tank = spawner
             else:
                 if wavespawn_kind == 'squad':
+                    # Remove scouts from eligible
+                    eligible = [e for e in eligible if e.get_kv('Class').lower() != 'scout']
                     # Squads will always have medics as their support
                     if eligible and not self.current_wave_rules['custom_only']:
                         # Middle steps avoid using full bot info
@@ -671,8 +712,14 @@ class Coordinator:
                         leader = TFBot('TFBot', [])
                         leader.set_kv('Template', template.name)
                         self.bot_templates_used.append(template.name)
+                        tfbot_class = leader.get_kv('Class', False, True)
                     else:
-                        leader = self.create_tfbot(strength=tfbot_strength / maxactive, tfbot_kind=chosen)
+                        tfbot_class = random.choice(['soldier', 'pyro', 'demoman', 'heavy', 'medic', 'sniper'])
+                        if tfbot_class == 'medic':
+                            restriction = random.choice([0, 2])
+                        else:
+                            restriction = None
+                        leader = self.create_tfbot(tfbot_class=tfbot_class, strength=tfbot_strength / maxactive, tfbot_kind=chosen, restriction=restriction)
                         self.template_add(leader, tfbot_strength / maxactive)
                     eligible_squad = self.get_templates_eligible(tfbot_strength, 0.5, ['scout', 'soldier', 'pyro', 'demoman', 'heavy', 'heavyweapons', 'engineer', 'sniper', 'spy'], kind=chosen)
                     if eligible_squad and eligible and not self.current_wave_rules['custom_only']:
@@ -690,6 +737,8 @@ class Coordinator:
                         all_squadded.append(squadded)
                         squadded_amount -= 1
                     squad = Spawner('Squad', [])
+                    if tfbot_class == 'medic':
+                        squad.set_kv('ShouldPreserveSquad', 1)
                     squad.spawners.append(leader)
                     squad.spawners.extend(all_squadded)
                     squad.all_subtrees.append(leader)
@@ -745,10 +794,6 @@ class Coordinator:
             if chosen != 'tank':
                 wavespawn.set_kv('Where', where)
 
-            # print(f'BOT TYPE {chosen} WS KIND {wavespawn_kind}')
-            # print(f'Desired Duration {total_groups}, Ideal Max {ideal}, Ideal Strength {strength_per}')
-            # print(f'TotalCount {totalcount}, MaxActive {maxactive}, SpawnCount {spawncount}')
-            # print(f'WaitBetweenSpawns {waitbetweenspawns}\n')
             # Prepare for next wavespawn
             money -= money_amounts[index]
             wavespawn_amount -= 1
@@ -781,7 +826,7 @@ class Coordinator:
             self.bot_templates_used.append(template.name)
             spawner = tfbot
         else:
-            spawner = self.create_tfbot(strength=strength, restriction=kind_slot[kind], tfbot_class=desired_class)
+            spawner = self.create_tfbot(strength=strength, restriction=kind_slot[kind], f_r=False, tfbot_class=desired_class, skill='expert')
             self.template_add(spawner, strength)
             if desired_class == 'engineer':
                 teleports = list(map_info['spawn_common'].keys())
@@ -799,10 +844,9 @@ class Coordinator:
 
     def create_tank(self, strength: float, speed: int=75) -> Tank:
         """Create a tank with the desired strength and optional speed."""
-        strength = round_to_nearest(strength, 500)
         tank = Tank('Tank', [])
         tank.set_kv('Name', 'tankboss')
-        health = round(strength * (75 / speed))
+        health = round_to_nearest(strength * (75 / speed), 500)
         tank.set_kv('Health', str(health))
         tank.set_kv('Speed', str(speed))
         path = weighted_random(map_info['spawn_tank'])
@@ -817,20 +861,32 @@ class Coordinator:
         tank.all_subtrees.extend([io_bomb, io_killed])
         return tank
 
-    def create_tfbot(self, strength: float, tfbot_class: str=False, tfbot_kind: str='common', p_e: tuple=False, restriction: int=0) -> TFBot:
+    def create_tfbot(self, strength: float, tfbot_class: str=False, tfbot_kind: str='common', p_e: tuple=False, restriction: int=None, skill: str=False, f_r: bool=True) -> TFBot:
         """Create a TFBot with the specified strength and restrictions.
         :param strength The maximum strength this bot can have.
         :param tfbot_class This TFBot will always be this class.
         :param tfbot_kind This TFBot will be this type. Either common, giant or boss.
-        :param p_e Tuple of the power and strength of a robot to use
+        :param p_e Tuple of the power and endurance for a robot to use. Forced.
         :param restriction Force a weapon restriction on this bot.
         0 for primary, 1 for secondary, 2 for melee. Defaults to 0."""
-        tfbot_skill = random.choice(['easy', 'normal', 'hard', 'expert'])
+        if skill:
+            tfbot_skill = skill
+        else:
+            tfbot_skill = random.choice(['easy', 'normal', 'hard', 'expert'])
         tfbot_scale = 1 if tfbot_kind != 'boss' else 1.9
         if not tfbot_class:
             tfbot_class = random.choice(['scout', 'soldier', 'pyro', 'demoman', 'heavy', 'sniper'])
-            if tfbot_class == 'sniper':
+
+        # Apply any special weapon restrictions if not specified for certain classes
+        if restriction is None:
+            if tfbot_class == 'medic':
+                restriction = 1
+            elif tfbot_class == 'sniper':
                 restriction = random.randrange(1, 3)  # Ends at 2, doesn't reach 3
+            elif tfbot_class == 'spy':
+                restriction = random.choice([0, 2])
+            else:
+                restriction = int(weighted_random(ai_info['bot_slot_odds']))
 
         # Apply speed strength modifier
         base_speed = all_classes[tfbot_class]['speed']
@@ -838,11 +894,11 @@ class Coordinator:
 
         tfbot_level = 1  # Rough approximations for strength
         if tfbot_kind == 'giant':
-            tfbot_level += strength // 400
+            tfbot_level += strength // 300
         elif tfbot_kind == 'boss':
-            tfbot_level += strength // 2500
+            tfbot_level += strength // 1250
         else:
-            tfbot_level += strength // 100
+            tfbot_level += strength // 75
 
         if not p_e:
             if tfbot_kind == 'common':
@@ -888,8 +944,12 @@ class Coordinator:
 
         # If this bot has a high enough desired base strength, give it crits
         if strength > ai_info['bot_crit_threshold'] and random.uniform(0, 1) < ai_info['bot_crit_chance']:
-            crits_enabled = True
-            strength /= 2
+            # Prevent mediguns from getting crits
+            if not (tfbot_class == 'medic' and restriction == 1):
+                crits_enabled = True
+                strength /= 2
+            else:
+                crits_enabled = False
         else:
             crits_enabled = False
 
@@ -911,11 +971,22 @@ class Coordinator:
         else:
             picked_passive = None
             picked_passive_info = None
-        allow_passive = True if ai_info['bot_passive_chance'] > random.uniform(0, 1) else False
+
+        # Override passive chance if desired
+        passive_chance = ai_info['bot_passive_chance']
+        if picked_weapon.get('passive_chance', False):
+            passive_chance = picked_weapon.get('passive_chance')
+
+        allow_passive = True if passive_chance > random.uniform(0, 1) else False
         picked_weapon_slot = get_weapon_info(tfbot_class, picked_weapon.get('name'))[1]
         picked_weapon_slot_mult = all_classes[tfbot_class]['power_mult_weapon'][picked_weapon_slot]
         power /= picked_weapon_slot_mult
         picked_weapon_info = weapons_info[tfbot_class]['items'][picked_weapon.get('name')]
+
+        # For reference,
+        # picked_weapon - info from config_classes.json
+        # picked_weapon_info - info from config_attributes.json
+        # Dumb naming but it is how it is
 
         if picked_weapon_info.get('whitelist', False):
             picked_weapon_whitelist_og = picked_weapon_info.get('whitelist')
@@ -925,17 +996,16 @@ class Coordinator:
             picked_weapon_whitelist_og = weapons_info[tfbot_class][f'whitelist_{slot_dict[restriction]}']
             picked_weapon_whitelist = picked_weapon_whitelist_og.copy()
             if picked_weapon_info.get('whitelist_extend', False):
-                picked_weapon_whitelist = picked_weapon_whitelist_og.copy()
-                picked_weapon_whitelist.extend(picked_weapon_info.get('whitelist_extend'))
+                picked_weapon_whitelist.extend(picked_weapon_info.get('whitelist_extend').copy())
 
         # Starts at 0, increase based on strength
         if strength > ai_info['bot_attribute_threshold']:
             attribute_max = strength // ai_info['bot_attribute_giant_per'] if tfbot_kind == 'giant' else strength // ai_info['bot_attribute_per']
-            attribute_min = attribute_max - 3 if attribute_max - 3 > 1 else 1
-            if attribute_min >= attribute_max + 1:  # Avoid crash
-                attribute_amounts = 0
+            attribute_min = attribute_max - 2 if attribute_max - 2 > 1 else 1
+            if attribute_min > attribute_max:  # Avoid crash
+                attribute_amounts = attribute_max
             else:
-                attribute_amounts = random.randrange(attribute_min, attribute_max + 1)
+                attribute_amounts = random.randint(attribute_min, attribute_max)
         else:
             attribute_amounts = 0
         # print(tfbot_class, tfbot_kind, tfbot_level, strength, power, attribute_amounts)
@@ -950,7 +1020,10 @@ class Coordinator:
             tfbot_name = f'Boss {tfbot_name}'
         tfbot_name = f'Level {round(tfbot_level)} {tfbot_name}'
         icon = 'random_lite_giant' if tfbot_kind == 'giant' or tfbot_kind == 'boss' else 'random_lite'
-        base_info = {'Class': tfbot_class, 'ClassIcon': icon, 'Skill': tfbot_skill, 'Health': round(endurance), 'WeaponRestrictions': slot_restrict[picked_weapon_slot]}
+        base_info = {'Class': tfbot_class, 'ClassIcon': icon, 'Skill': tfbot_skill, 'Health': round(endurance)}
+        # Specifically for support robots
+        if f_r:  # Force Restriction, if desired
+            base_info['WeaponRestrictions'] = slot_restrict[picked_weapon_slot]
         if tfbot_scale != 1:
             base_info['Scale'] = [tfbot_scale]
         base_info['Name'] = quotify(tfbot_name)
@@ -967,6 +1040,9 @@ class Coordinator:
                     primary_character_attributes[quotify(k)] = primary_attributes[k]
                 else:
                     primary_attributes_re[quotify(k)] = primary_attributes[k]
+            else:
+                # If this attribute is undefined (like stickybomb info), include it in weapon attributes
+                primary_attributes_re[quotify(k)] = primary_attributes[k]
 
         if primary_attributes_re:
             weapon_attributes = Attributes('ItemAttributes', [])
@@ -983,11 +1059,12 @@ class Coordinator:
 
         # Attributes AlwaysCharge allowed?
         if picked_weapon.get('charge', False) or passive_charge:
-            if tfbot_kind == 'common' and ai_info['bot_common_charge_chance'] < random.uniform(0, 1):
+            if tfbot_kind == 'common' and ai_info['bot_common_charge_chance'] > random.uniform(0, 1):
                 tfbot.set_kv('Attributes', 'SpawnWithFullCharge')
             elif tfbot_kind != 'common' and ai_info['bot_giant_charge_threshold'] < strength:
                 tfbot.set_kv('Attributes', 'SpawnWithFullCharge')
 
+        # Attributes HoldFireUntilFullReload allowed?
         burstmode = picked_weapon.get('burst', 0)
         if burstmode == 1:
             if random.uniform(0, 1) < ai_info['bot_burst_chance']:
@@ -995,9 +1072,15 @@ class Coordinator:
         elif burstmode == 2:
             tfbot.set_kv('Attributes', 'HoldFireUntilFullReload')
 
+        # MaxVisionRange for this weapon
+        visionrange = picked_weapon.get('maxvision', False)
+        if visionrange:
+            tfbot.set_kv('MaxVisionRange', visionrange)
+
         if crits_enabled:
             tfbot.set_kv('Attributes', 'AlwaysCrit')
 
+        # Do the same thing for mainweapon, except for passive weapon this time
         if allow_passive and picked_passive:
             if picked_passive_info.get('whitelist', False):
                 passive_whitelist_og = picked_passive_info.get('whitelist')
@@ -1007,7 +1090,7 @@ class Coordinator:
                 passive_whitelist_og = weapons_info[tfbot_class][f'whitelist_{slot_dict[passive_slot]}']
                 passive_whitelist = passive_whitelist_og.copy()
                 if picked_passive_info.get('whitelist_extend', False):
-                    passive_whitelist.extend(picked_passive_info.get('whitelist_extend'))
+                    passive_whitelist.extend(picked_passive_info.get('whitelist_extend').copy())
 
             if picked_passive_info.get('whitelist', False) == []:
                 passive_whitelist = []
@@ -1035,7 +1118,6 @@ class Coordinator:
             tfbot.set_kv('Attributes', 'MiniBoss')
             if tfbot_kind == 'boss':
                 tfbot.set_kv('Attributes', 'UseBossHealthBar')
-            character_attributes = Attributes('CharacterAttributes', [])
             character_dict = {}
             if tfbot_class == 'medic':
                 character_dict['heal rate bonus'] = 200.0
@@ -1055,6 +1137,7 @@ class Coordinator:
         else:
             character_dict = primary_character_attributes
 
+        # Apply character attributes, if necessary
         character_attributes = Attributes('CharacterAttributes', [])
         if character_dict != {}:
             character_attributes.copy(character_dict)
@@ -1147,6 +1230,7 @@ class Coordinator:
                 tfbot_health = all_classes[tfbot_class]['health_giant']
             else:
                 tfbot_health = all_classes[tfbot_class]['health']
+        is_giant = True if 'MiniBoss' in tfbot_attributes else False
 
         # Apply the power mult of this weapon's slot - NOT COMPLETE
 
@@ -1155,6 +1239,7 @@ class Coordinator:
         base_power = 0
 
         has_itemname = []
+        has_itemattributes = False
 
         if bot.item_attributes == []:  # Hard-coded default item powers
             base_power = all_classes[tfbot_class]['power']
@@ -1181,6 +1266,11 @@ class Coordinator:
             # PROBLEM:
             # All weapons end up having their strength pooled together, instead of being considered separate
             # Add separate variables for weapon strengths, and then add those together
+
+            # If this TFBot has any item attributes, it's to be considered stronger than ones without
+            if a.name == 'ItemAttributes':
+                has_itemattributes = True
+
             if itemname:
                 has_itemname.append(itemname)
                 item_info = get_weapon_info(tfbot_class, itemname)
@@ -1215,6 +1305,9 @@ class Coordinator:
                 if b:  # If this attribute is to be considered,
                     attribute_define = all_attributes[b[1]]
                     base_strength, base_power, base_endurance = apply_attribute_values(attribute_define, value, base_strength, base_power, base_endurance)
+
+        if is_giant and not has_itemattributes:
+            base_strength *= ai_info['bot_giant_stock_mult']
 
         return base_power, base_endurance, base_strength * (base_power + base_endurance)
 
@@ -1352,3 +1445,12 @@ class Coordinator:
                 return min(self.total_currency * self.strength_mult * gradual_mult, alt_strength)
             else:
                 return self.total_currency * self.strength_mult * gradual_mult
+
+    def wave_tank_strength(self, divisor: int=1):
+        """Calculate the strength for this tank using the current money available.
+        Tank HP needs a different strength calculation to accommodate for lower cash.
+
+        divisor divides the input cash by the specified amount."""
+        tank_mult = ai_info['wave_strength_tank_mult']
+        tank_slope = ai_info['wave_strength_tank_slope']
+        return ai_info['tank_strength_mult'] * self.strength_mult * tank_mult * (self.total_currency / divisor)**(1 / tank_slope)

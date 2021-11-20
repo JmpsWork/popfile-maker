@@ -12,6 +12,18 @@ WaveSchedule
 	        Class Scout
 	        Skill expert
 	    }
+	    T_TFBot_Scout_Easy_Crit
+	    {
+	        Class Scout
+	        Skill easy
+	        Attributes AlwaysCrit
+	    }
+        T_TFBot_Scout_Expert_Crit
+	    {
+	        Class Scout
+	        Skill expert
+	        Attributes AlwaysCrit
+	    }
 	    T_TFBot_Soldier_Easy
 	    {
 	        Class Soldier
@@ -21,6 +33,18 @@ WaveSchedule
 	    {
 	        Class Soldier
 	        Skill expert
+	    }
+	    T_TFBot_Soldier_Easy_Crit
+	    {
+	        Class Soldier
+	        Skill easy
+	        Attributes AlwaysCrit
+	    }
+	    T_TFBot_Soldier_Expert_Crit
+	    {
+	        Class Soldier
+	        Skill expert
+	        Attributes AlwaysCrit
 	    }
 	    T_TFBot_Pyro_Easy
 	    {
@@ -32,6 +56,18 @@ WaveSchedule
 	        Class Pyro
 	        Skill expert
 	    }
+	    T_TFBot_Pyro_Easy_Crit
+	    {
+	        Class Pyro
+	        Skill easy
+	        Attributes AlwaysCrit
+	    }
+	    T_TFBot_Pyro_Expert_Crit
+	    {
+	        Class Pyro
+	        Skill expert
+	        Attributes AlwaysCrit
+	    }
 	    T_TFBot_Demoman_Easy
 	    {
 	        Class Demoman
@@ -42,6 +78,18 @@ WaveSchedule
 	        Class Demoman
 	        Skill expert
 	    }
+	    T_TFBot_Demoman_Easy_Crit
+	    {
+	        Class Demoman
+	        Skill easy
+	        Attributes AlwaysCrit
+	    }
+	    T_TFBot_Demoman_Expert_Crit
+	    {
+	        Class Demoman
+	        Skill expert
+	        Attributes AlwaysCrit
+	    }
 	    T_TFBot_Heavy_Easy
 	    {
             Class Heavy
@@ -51,6 +99,18 @@ WaveSchedule
 	    {
 	        Class Heavy
             Skill expert
+	    }
+	    T_TFBot_Heavy_Easy_Crit
+	    {
+            Class Heavy
+            Skill easy
+            Attributes AlwaysCrit
+	    }
+	    T_TFBot_Heavy_Expert_Crit
+	    {
+	        Class Heavy
+            Skill expert
+            Attributes AlwaysCrit
 	    }
 	    T_TFBot_Medic_Easy
 	    {

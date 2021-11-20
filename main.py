@@ -1,5 +1,6 @@
 """Main file to run."""
 import thinker
+from func_extras import colored_text
 
 coordinator = thinker.Coordinator([])
 app_open = True
@@ -15,14 +16,14 @@ def command_create_pop(name: str):
 def command_create_tfbot(strength: int, tfbot_kind: str='common', tfbot_class: str=False, restrict: int=0):
     """Create a new TFBot from it's strength and, if specified, various specifications.
     Inputs:
-    strength (int): The amount of overall power this TFBot can have.
-    tfbot_kind (str) (optional): The specific kind of TFBot. Can either be command, giant or boss. Defaults to common.
-    tfbot_class (str) (optional): The specified class. Defaults to randomly being a scout, soldier, pyro, demoman, heavy or sniper.
-    restrict (int) (optional): 0 for PrimaryOnly, 1 for SecondaryOnly or 2 for MeleeOnly."""
+    strength (int) - The amount of overall power this TFBot can have.
+    tfbot_kind (str) (optional) - The specific kind of TFBot. Can either be command, giant or boss. Defaults to common.
+    tfbot_class (str) (optional) - The specified class. Defaults to randomly being a scout, soldier, pyro, demoman, heavy or sniper.
+    restrict (int) (optional) - 0 for PrimaryOnly, 1 for SecondaryOnly or 2 for MeleeOnly."""
     strength = float(strength)
     restrict = int(restrict)
     t = coordinator.create_tfbot(strength=strength, tfbot_kind=tfbot_kind, tfbot_class=tfbot_class, restriction=restrict)
-    print('\nNew bot:\n')
+    print(colored_text('\nNew bot:\n', 34))
     print(t.string_spaced())
     print()
 
@@ -42,7 +43,11 @@ def command_help(command: str = ''):
         print(ref.__doc__)
     else:
         for c, d in command_reference.items():
-            print(f'\n{c} | Parameters: {", ".join(d.__annotations__.keys())}')
+            if len(d.__annotations__.keys()) == 0:
+                params = "None"
+            else:
+                params = ", ".join(d.__annotations__.keys())
+            print(f'\n{c} | Parameters: {params}')
 
 
 def command_list_templates():
@@ -50,7 +55,7 @@ def command_list_templates():
     print('-'*30)
     coordinator.get_templates()
     for b, s in coordinator.bot_templates_strengths:
-        print(f'Template: {b.name} | Strength: {round(s[2])}')
+        print(f'Template: {b.name} | Strength: {colored_text(round(s[2]), 34)}')
     print('-'*30)
 
 
@@ -58,13 +63,13 @@ def command_reload():
     """Reload all the used configs."""
     # Does nothing
     coordinator.reload_config()
-    print('Configs reloaded!')
+    print(colored_text('Configs reloaded!', 97))
 
 
 def command_templates_refresh():
     """Refresh all the templates used by the generator."""
     coordinator.get_templates()
-    print('Templates reacquired.')
+    print(colored_text('Templates reacquired.', 97))
 
 
 command_reference = {
@@ -77,16 +82,17 @@ command_reference = {
     'templates_refresh': command_templates_refresh
 }
 
+print(f'\33[{30}m', end='')  # White default text
 print('-'*40)
 print('Popfile Generator by JMP. Type "help" for a list of commands.')
 
 while app_open:
-    request = input('>>> ')
+    request = input(colored_text('>>> ', 35))
     args = request.split()
     try:
         command_desired = args[0]
     except IndexError:
-        print('Please put in a command.')
+        print(colored_text('Please put in a command.', 31))
         command_desired = None
 
     if len(args) > 1:
@@ -100,6 +106,6 @@ while app_open:
             try:
                 command(*command_arguments)
             except TypeError as e:
-                print(f'Command "{command_desired}" missing arguments.')
+                print(colored_text(f'Command "{command_desired}" missing arguments.', 31))
         else:
-            print(f'Invalid command "{command_desired}".')
+            print(colored_text(f'Invalid command "{command_desired}".', 31))
