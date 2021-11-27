@@ -82,8 +82,8 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``no`` - A list of bots which cannot be used for this wave. Can contain ``commons``, ``giants``, ``tanks`` or ``boss``.
 * ``must_include`` - A list of bots which must be included in this wave, at least once. Can contain ``commons``, ``giants``, ``tanks`` or ``boss``.
 * ``subwaves`` - Override the amount of subwaves (groups of identically named wavespawns) which can be used this wave.
-* ``bot_amount`` - Unused.
-* ``bot_types`` - Sets the amount of wavespawns per subwave this wave will have.
+* ``bot_amount`` - Amount of total groups each wavespawn will have for the entirety of a wave.
+* ``bot_types`` - Amount of wavespawns each subwave will have for the entirety of a wave.
 * ``custom_only`` - The program will exclusively create new tfbots instead of opting to use ones found inside its templates.
 
 ## config_map.json
@@ -157,5 +157,5 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``strength_variance`` - A range of the strength multiplied and divided by this value will be applied to the ideal strength of a subwave. A bot from templates can be chosen from within this range.
 * ``endless`` - If set to true, separate waves will instead be merged together instead of split among separate waves.
 * ``spaced`` - If set to true, the output file will be properly spaced and lined, instead of being but on 1 massive line.
-* ``modded`` - If set to true, allows the use of SIGSEGV exclusive keys.
+* ``modded`` - Unused.
  
