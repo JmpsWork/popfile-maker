@@ -540,14 +540,19 @@ class Coordinator:
             else:
                 desired_wavespawns = int(weighted_random(ai_info['wavespawn_amount']))
 
-            wavespawns = self.create_subwave_section(desired_wavespawns, bot_types, bot_types_priority, money_amounts[index], powers)
+            if self.current_wave_rules.get('bot_amount', -1) != -1:
+                desired_duration = self.current_wave_rules['bot_amount']
+            else:
+                desired_duration = None
+
+            wavespawns = self.create_subwave_section(desired_wavespawns, bot_types, bot_types_priority, money_amounts[index], powers, duration=desired_duration)
             desired_subwaves -= 1
             wave_money -= money_amounts[index]
             all_subwaves.append(wavespawns)
         self.bot_templates_used = []
         return all_subwaves, all_supports
 
-    def create_subwave_section(self, wavespawn_amount: int, allowed: dict, priority: dict, money: float, powers: tuple, slot_restrict: int=0) -> list:
+    def create_subwave_section(self, wavespawn_amount: int, allowed: dict, priority: dict, money: float, powers: tuple, slot_restrict: int=0, duration: int=None) -> list:
         """Create a group of wavespawns with the same name that spawn at the same time.
         :arg wavespawn_amount create this many number of wavespawns for this subwave.
         :arg allowed allowed bot types. Bots from here will get chosen randomly from their associated weights.
@@ -560,7 +565,10 @@ class Coordinator:
         total_max_bots = slot_restrict
         total_wavespawns = wavespawn_amount
         # Weights for the "duration" of this subwave section, which are consistent over every wavespawn
-        total_groups = weighted_random({int(k): v for k, v in ai_info['wavespawn_durations'].items()})
+        if duration is not None:
+            total_groups = duration
+        else:
+            total_groups = weighted_random({int(k): v for k, v in ai_info['wavespawn_durations'].items()})
         created_wavespawns = []
         # Keep track of the kinds of things we make
         wavespawn_stream_made = False
@@ -622,8 +630,8 @@ class Coordinator:
                     else:
                         chosen_amount = 1
                     spawncount, maxactive, totalcount = chosen_amount, chosen_amount * random.randint(2, 3), chosen_amount * total_groups
-                    if total_wavespawns == 1:
-                        maxactive *= 2
+                if total_wavespawns == 1:
+                    maxactive *= 2
             else:
                 if wavespawn_kind == 'squad':
                     spawncount = 2
@@ -747,7 +755,7 @@ class Coordinator:
                 elif wavespawn_kind == 'random':
                     # Random will have a random set of tfbots that fill up spawncount
                     # Avoid using too many templates for randomchoice
-                    required = spawncount if spawncount <= 3 else round(spawncount / 2)
+                    required = random.randint(2, 3)
                     used = []
                     while required > 0:
                         # If there are any eligible TFBots, use those first
@@ -1194,6 +1202,8 @@ class Coordinator:
 
     def reload_config(self):
         """Reloads all configs."""
+        with open('config_waves.json', 'r') as wr:
+            self.rules = json.loads(wr.read())
         refresh()
 
     def template_add(self, bot: TFBot, strength: float) -> TFBot:
@@ -1399,7 +1409,7 @@ class Coordinator:
 
         includes = rules.get('must_include', [])
         if includes != []:
-            new_rules['must_include'].append(*includes)
+            new_rules['must_include'].extend(includes)
         not_included = rules.get('no', [])
         if not_included != []:
             new_rules['no'].extend(not_included)

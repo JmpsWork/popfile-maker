@@ -61,15 +61,14 @@ def command_list_templates():
 
 def command_reload():
     """Reload all the used configs."""
-    # Does nothing
     coordinator.reload_config()
-    print(colored_text('Configs reloaded!', 97))
+    print(colored_text('Configs reloaded!', 96))
 
 
 def command_templates_refresh():
     """Refresh all the templates used by the generator."""
     coordinator.get_templates()
-    print(colored_text('Templates reacquired.', 97))
+    print(colored_text('Templates reacquired.', 96))
 
 
 command_reference = {
@@ -103,9 +102,6 @@ while app_open:
     if command_desired is not None:
         command = command_reference.get(command_desired, False)
         if command:
-            try:
                 command(*command_arguments)
-            except TypeError as e:
-                print(colored_text(f'Command "{command_desired}" missing arguments.', 31))
         else:
             print(colored_text(f'Invalid command "{command_desired}".', 31))
