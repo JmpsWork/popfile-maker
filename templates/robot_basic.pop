@@ -126,5 +126,79 @@ WaveSchedule
 	        Attributes SpawnWithFullCharge
 	        WeaponRestrictions SecondaryOnly
 	    }
+
+        T_TFBot_Soldier_Powered
+        {
+            Class Soldier
+            Skill Expert
+            Attributes AlwaysCrit
+            Item "Defiant Spartan"
+            ItemAttributes
+            {
+                ItemName "TF_WEAPON_ROCKETLAUNCHER"
+                "damage bonus"	2.0
+                "faster reload rate" -0.8
+                "fire rate bonus" 0.6
+            }
+        }
+        T_TFBot_Pyro_Powered
+        {
+            Class Pyro
+            Skill Expert
+            Attributes AlwaysCrit
+            Item "Old Guadalajara"
+            ItemAttributes
+            {
+                ItemName "TF_WEAPON_FLAMETHROWER"
+                "damage bonus"	2.0
+            }
+            CharacterAttributes
+            {
+                "move speed bonus"	1.5
+            }
+        }
+        T_TFBot_Demoman_Powered
+        {
+            Class Demoman
+            Skill Expert
+            Attributes AlwaysCrit
+            Item "Spine-Chilling Skull"
+            ItemAttributes
+            {
+                ItemName "TF_WEAPON_GRENADELAUNCHER"
+                "damage bonus"	2.0
+                "faster reload rate" -0.8
+                "Projectile speed increased" 2.0
+            }
+        }
+        T_TFBot_Heavy_Powered
+        {
+            Class Heavyweapons
+            Skill Expert
+            Attributes AlwaysCrit
+            Item "The Crone's Dome"
+            ItemAttributes
+            {
+                ItemName "TF_WEAPON_MINIGUN"
+                "damage bonus"	1.5
+            }
+        }
+	    T_TFBot_Sniper_Huntsman_Powered
+	    {
+	        Class Sniper
+	        Name "Bowman"
+	        Skill hard
+	        ClassIcon sniper_bow
+	        WeaponRestrictions PrimaryOnly
+	        Item "The Huntsman"
+	        Item "Larrikin Robin"
+	        Attributes AlwaysCrit
+	        ItemAttributes
+	        {
+	            ItemName "The Huntsman"
+	            "damage bonus" 1.5
+	            "faster reload rate" 0.2
+	        }
+	    }
     }
 }

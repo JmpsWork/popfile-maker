@@ -102,6 +102,9 @@ while app_open:
     if command_desired is not None:
         command = command_reference.get(command_desired, False)
         if command:
+            try:
                 command(*command_arguments)
+            except TypeError:
+                print(colored_text(f'Command "{command_desired}" missing arguments!', 31))
         else:
             print(colored_text(f'Invalid command "{command_desired}".', 31))

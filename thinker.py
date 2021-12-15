@@ -834,7 +834,7 @@ class Coordinator:
             self.bot_templates_used.append(template.name)
             spawner = tfbot
         else:
-            spawner = self.create_tfbot(strength=strength, restriction=kind_slot[kind], f_r=False, tfbot_class=desired_class, skill='expert')
+            spawner = self.create_tfbot(strength=strength, restriction=kind_slot[kind], f_r=False, tfbot_class=desired_class, skill='expert', support_bot=True)
             self.template_add(spawner, strength)
             if desired_class == 'engineer':
                 teleports = list(map_info['spawn_common'].keys())
@@ -855,6 +855,9 @@ class Coordinator:
         tank = Tank('Tank', [])
         tank.set_kv('Name', 'tankboss')
         health = round_to_nearest(strength * (75 / speed), 500)
+        # If health exceeds maximum, clamp it
+        if health > ai_info['tank_hp_max']:
+            health = ai_info['tank_hp_max']
         tank.set_kv('Health', str(health))
         tank.set_kv('Speed', str(speed))
         path = weighted_random(map_info['spawn_tank'])
@@ -869,7 +872,7 @@ class Coordinator:
         tank.all_subtrees.extend([io_bomb, io_killed])
         return tank
 
-    def create_tfbot(self, strength: float, tfbot_class: str=False, tfbot_kind: str='common', p_e: tuple=False, restriction: int=None, skill: str=False, f_r: bool=True) -> TFBot:
+    def create_tfbot(self, strength: float, tfbot_class: str=False, tfbot_kind: str='common', p_e: tuple=False, restriction: int=None, skill: str=False, f_r: bool=True, support_bot: bool=False) -> TFBot:
         """Create a TFBot with the specified strength and restrictions.
         :param strength The maximum strength this bot can have.
         :param tfbot_class This TFBot will always be this class.
@@ -888,10 +891,10 @@ class Coordinator:
         # Apply any special weapon restrictions if not specified for certain classes
         if restriction is None:
             if tfbot_class == 'medic':
+                # Exclusively medigun
                 restriction = 1
-            elif tfbot_class == 'sniper':
-                restriction = random.randrange(1, 3)  # Ends at 2, doesn't reach 3
             elif tfbot_class == 'spy':
+                # Either primary or melee
                 restriction = random.choice([0, 2])
             else:
                 restriction = int(weighted_random(ai_info['bot_slot_odds']))
@@ -937,6 +940,11 @@ class Coordinator:
             #    power = all_classes[tfbot_class]['power']
         else:
             power, endurance = p_e
+            power, endurance = round(power), round(endurance)
+
+        # If this bot's hp would be more than the max, clamp it to the max
+        if endurance > ai_info['bot_hp_max']:
+            endurance = ai_info['bot_hp_max']
 
         if tfbot_skill == 'easy':
             power /= all_classes[tfbot_class]['power_mult_skill'][0]
@@ -971,7 +979,14 @@ class Coordinator:
                 if is_passive and i != restriction:
                     allowed_passives.append((item, item.get('weight', 10)))
                 elif not is_passive and i == restriction:
-                    allowed_weapons.append((item, item.get('weight', 10)))
+                    # Support bots get exclusive weapon searches
+                    if support_bot:
+                        # All weapons for a certain slot are allowed for support bots
+                        allowed_weapons.append((item, item.get('weight', 10)))
+                    else:
+                        # If this weapon is noy exclusively for support bots, append it
+                        if not item.get('support_only', False):
+                            allowed_weapons.append((item, item.get('weight', 10)))
         picked_weapon = random.choices([it[0] for it in allowed_weapons], weights=[iw[1] for iw in allowed_weapons])[0]
         if allowed_passives != []:  # Error if empty list
             picked_passive = random.choices([it[0] for it in allowed_passives], weights=[iw[1] for iw in allowed_passives])[0]
