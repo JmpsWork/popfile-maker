@@ -17,8 +17,12 @@ This md file contains an explanation as to what all the possible keys does for e
     * ``passive`` - Allows this weapon to be used in parallel with another weapon, and will prevent this weapon from being chosen as the main weapon.
     * ``charge`` - Tells the program that this weapon is compatible with Attributes SpawnWithFullCharge
     * ``alt`` - A list of alternate names for this weapon.
-  * ``secondaries`` - A list of secondary weapons that this class is allowed to use.
-  * ``melee`` - A list of melee weapons that this class is allowed to use.
+    * ``burst`` - A number which determines the use of HoldFireUntilFullReload. 0 for never, 1 for randomly and 2 for always.
+    * ``passive_chance`` - Overrides the default chance that a passive weapon can be used with this one. Always a number between 0 and 1.
+    * ``maxvision`` - If a bot with this weapon is made, this will set the MaxVisionRange of that bot.
+    * ``support_only`` - A boolean if set to true, makes this weapon only usable by support bots. Also used to verify if a weapon is valid for certain template robots.
+  * ``secondaries`` - A list of secondary weapons that this class is allowed to use. Same system as ``primaries`` for contents.
+  * ``melee`` - A list of melee weapons that this class is allowed to use. Same system as ``primaries`` for contents.
 
 ## config_attributes.json
 
@@ -26,9 +30,9 @@ This md file contains an explanation as to what all the possible keys does for e
   * ``name`` - The name of this attribute.
   * ``type`` - What value does this attribute modify? Can either be power, endurance or strength
   * ``inverse`` - The name of this attribute when it tends towards 0.
-  * ``operator`` - How the value of this attribute acts upon the power, endurance or strength of a bot. Can either be ``exp``, ``inv_exp``, ``mult``, ``add`` or ``none``
+  * ``operator`` - How the value of this attribute acts upon the power, endurance or strength of a bot. Can either be ``exp``, ``inv_exp``, ``mult``, ``add``, ``mult_add``, ``percentage_add`` or ``none``
   * ``base`` - Base modifier amount.
-  * ``mult`` - A multiplier to the base amount.
+  * ``mult`` - A multiplier to the base amount. Sometimes not used depending on the operator.
   * ``clamp`` - Used when calculating the strength of a bot. If the value goes below this amount, then it will get interpreted as this value instead.
   * ``ceil`` - Identical to clamp, except it checks for any value above this amount.
   * ``def`` - The default value of this attribute.
@@ -48,6 +52,7 @@ This md file contains an explanation as to what all the possible keys does for e
   * ``items`` - A list of items for this class.
     * ``itemname`` - The name of this item.
       * ``default`` - The default attributes of this item.
+      * ``default_add`` - A set of attributes and values which will always be added to a custom robot using this weapon.
       * ``whitelist_extend`` - Extend the whitelist of this weapon's slot with another attribute found within the corresponding attributes for this slot.
       * ``whitelist`` - Override the exisitng whitelist for this slot with a new list of attributes.
       * ``priority`` - A list of attribute names which will be chosen first over others when making a tfbot with this weapon.
@@ -68,7 +73,7 @@ This md file contains an explanation as to what all the possible keys does for e
     * ``rules`` - The rules to apply for this wave. 
 
 **conds**
-* ``starting_from`` - The number to consider this pattern from.
+* ``starting_from`` - The wave number to consider this pattern from.
 
 **rules**
 * ``power_mult_max`` - A multiplier to the maxmimum power that bots can have for this wave.
@@ -85,6 +90,7 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``bot_amount`` - Amount of total groups each wavespawn will have for the entirety of a wave.
 * ``bot_types`` - Amount of wavespawns each subwave will have for the entirety of a wave.
 * ``custom_only`` - The program will exclusively create new tfbots instead of opting to use ones found inside its templates.
+* ``support_allowed`` - Allows the usage of support bots with objectives, such as snipers, spies and engineers.
 
 ## config_map.json
 
@@ -114,7 +120,13 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``bot_minigiant_chance`` - When making a new bot with a strength above ``bot_hp_threshold``, this is the chance that it will be chosen to be a minigiant.
 * ``bot_hp_threshold`` - The minimum strength of a bot to be eligble for minigiant status.
 * ``bot_giant_hp_threshold`` - The minimum strength where a giant's bot total strength will be split evenly between endurance and power.
+* ``bot_burst_chance`` - If a weapon with ``burst`` set to 1 is chosen, this is the chance that it will come with HoldFireUntilFullReload.
+* ``bot_giant_search_add`` - When searching for a giant template, this amount of strength will be added to the desired amount when searching.
+* ``bot_giant_stock_mult`` - If a giant is exclusively using a weapon with no attributes, this amount will be multiplied to it's final strength.
+* ``bot_slot_odds`` - The weights that a specific slot will be chosen when making a random bot.
+* ``bot_hp_max`` - The maximum amount of hp any one bot can be given. Universally applied to commons, giants and bosses.
 * ``bot_burst_chance`` - The percentage chance from ``0`` to ``1`` that a bot with an eligible weapon will be given HoldFireUntilFullReload.
+* ``bot_speed_default`` - The base speed of a robot. A bot with a higher base speed has its strength increased compared to slower bots.
 * ``bot_crit_threshold`` - The minimum strength a bot can have before being given ``Attributes AlwaysCrit``.
 * ``bot_crit_chance`` - The percentage chance a bot, if eligible, will be given crits.
 * ``bot_deviance_chance`` - The percentage chance an attribute can be deviant.
@@ -132,6 +144,7 @@ This md file contains an explanation as to what all the possible keys does for e
 * ``tank_strength_mult`` - The multiplier to individual tank strength when making a wavespawn with them.
 * ``tank_strength_bias`` - Decreases tank hp by this inverted percentage amount depending on the number of subwaves. Numbers closer to 1 decrease it more. Negative numbers increase tank hp.
 * ``tank_speeds``- The possible speeds a tank can have, each with their own weighted chance.
+* ``tank_hp_max`` - The maximum possible hp a tank can have in a mission. It will never exceed this value, regardless of speed.
 * ``wavespawn_regular_weight`` - When making a subwave, this is the weight that a regular wavespawn (with only one bot type) will be chosen.
 * ``wavespawn_random_weight`` - When making a subwave, this is the weight that RandomChoice will be chosen as the spawner.
 * ``wavespawn_squad_weight`` - When making a subwave, this is the weight that Squad will be chosen as the spawner.
