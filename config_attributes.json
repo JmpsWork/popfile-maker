@@ -1700,7 +1700,9 @@
                 },
                 "whitelist": ["mult_item_meter_charge_rate", "fire rate bonus", "applies snare effect", "move speed bonus"]
             },
-            "the huntsman": {},
+            "the huntsman": {
+                "whitelist": ["damage bonus", "fire rate bonus", "faster reload rate", "heal on kill"]
+            },
             "the machina": {
                 "default": {
                     "sniper full charge damage bonus": 1.15

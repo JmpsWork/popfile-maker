@@ -9,7 +9,8 @@
     "primaries": [
       {
         "name": "tf_weapon_scattergun",
-        "weight": 50
+        "weight": 50,
+        "default": true
       },
       {
         "name": "the soda popper",
@@ -31,7 +32,8 @@
     "secondaries": [
       {
         "name": "tf_weapon_pistol_scout",
-        "weight": 40
+        "weight": 40,
+        "default": true
       },
       {
         "name": "the winger",
@@ -63,7 +65,8 @@
     "melee": [
       {
         "name": "tf_weapon_bat",
-        "weight": 30
+        "weight": 30,
+        "default": true
       },
       {
         "name": "the holy mackerel",
@@ -98,7 +101,8 @@
       {
         "name": "tf_weapon_rocketlauncher",
         "burst": 1,
-        "weight": 50
+        "weight": 50,
+        "default": true
       },
       {
         "name": "the original",
@@ -129,7 +133,8 @@
     "secondaries": [
       {
         "name": "tf_weapon_shotgun_soldier",
-        "weight": 60
+        "weight": 60,
+        "default": true
       },
       {
         "name": "the righteous bison",
@@ -172,7 +177,8 @@
     "melee": [
       {
         "name": "tf_weapon_shovel",
-        "weight": 10
+        "weight": 10,
+        "default": true
       },
       {
         "name": "the market gardener",
@@ -202,7 +208,8 @@
     "primaries": [
       {
         "name": "tf_weapon_flamethrower",
-        "weight": 100
+        "weight": 100,
+        "default": true
       },
       {
         "name": "the degreaser",
@@ -227,7 +234,8 @@
     "secondaries": [
       {
         "name": "tf_weapon_shotgun_pyro",
-        "weight": 10
+        "weight": 10,
+        "default": true
       },
       {
         "name": "the flare gun",
@@ -245,7 +253,8 @@
     "melee": [
       {
         "name": "tf_weapon_axe",
-        "weight": 20
+        "weight": 20,
+        "default": true
       },
       {
         "name": "the back scratcher",
@@ -268,12 +277,13 @@
       {
         "name": "tf_weapon_grenadelauncher",
         "burst": 1,
-        "weight": 100
+        "weight": 100,
+        "default": true
       },
       {
         "name": "the iron bomber",
         "burst": 1,
-        "weight": 5000
+        "weight": 80
       },
       {
         "name": "the loch-n-load",
@@ -290,7 +300,8 @@
     "secondaries": [
       {
         "name": "tf_weapon_pipebomblauncher",
-        "weight": 100
+        "weight": 100,
+        "default": true
       },
       {
         "name": "the chargin' targe",
@@ -311,7 +322,8 @@
     "melee": [
       {
         "name": "tf_weapon_bottle",
-        "weight": 20
+        "weight": 20,
+        "default": true
       },
       {
         "name": "the eyelander",
@@ -347,7 +359,8 @@
         "name": "tf_weapon_minigun",
         "alt": ["iron curtain"],
         "weight": 100,
-        "maxvision": 1200
+        "maxvision": 1200,
+        "default": true
       },
       {
         "name": "the huo long heatmaker",
@@ -376,7 +389,8 @@
       {
         "name": "tf_weapon_shotgun_hwg",
         "weight": 100,
-        "maxvision": 1200
+        "maxvision": 1200,
+        "default": true
       },
       {
         "name": "the family business",
@@ -397,7 +411,8 @@
     "melee": [
       {
         "name": "tf_weapon_fists",
-        "weight": 10
+        "weight": 10,
+        "default": true
       },
       {
         "name": "fists of steel",
@@ -430,7 +445,8 @@
     "primaries": [
       {
         "name": "tf_weapon_shotgun_primary",
-        "weight": 20
+        "weight": 20,
+        "default": true
       },
       {
         "name": "the frontier justice",
@@ -444,7 +460,8 @@
     "secondaries": [
       {
         "name": "tf_weapon_pistol",
-        "weight": 100
+        "weight": 100,
+        "default": true
       },
       {
         "name": "the short circuit",
@@ -454,7 +471,8 @@
     "melee": [
       {
         "name": "tf_weapon_wrench",
-        "weight": 20
+        "weight": 20,
+        "default": true
       },
       {
         "name": "the jag",
@@ -480,7 +498,8 @@
     "primaries": [
       {
         "name": "tf_weapon_syringegun",
-        "weight": 20
+        "weight": 20,
+        "default": true
       },
       {
         "name": "the crusader's crossbow",
@@ -495,7 +514,8 @@
       {
         "name": "tf_weapon_medigun",
         "charge": true,
-        "weight": 30
+        "weight": 30,
+        "default": true
       },
       {
         "name": "the quick-fix",
@@ -511,7 +531,8 @@
     "melee": [
       {
         "name": "tf_weapon_bonesaw",
-        "weight": 20
+        "weight": 20,
+        "default": true
       },
       {
         "name": "tf_weapon_bonesaw",
@@ -535,11 +556,14 @@
     "primaries": [
       {
         "name": "tf_weapon_sniperrifle",
-        "weight": 40
+        "weight": 40,
+        "support_only": true,
+        "default": true
       },
       {
         "name": "the sydney sleeper",
-        "weight": 40
+        "weight": 40,
+        "support_only": true
       },
       {
         "name": "the huntsman",
@@ -547,18 +571,21 @@
       },
       {
         "name": "the machina",
-        "weight": 30
+        "weight": 30,
+        "support_only": true
       },
       {
         "name": "the bazaar bargain",
         "weight": 20,
-        "passive_chance": 1
+        "passive_chance": 1,
+        "support_only": true
       }
     ],
     "secondaries": [
       {
         "name": "tf_weapon_smg",
-        "weight": 100
+        "weight": 100,
+        "default": true
       },
       {
         "name": "the cleaner's carbine",
@@ -587,7 +614,8 @@
     "melee": [
       {
         "name": "tf_weapon_kukri",
-        "weight": 20
+        "weight": 20,
+        "default": true
       },
       {
         "name": "the shahanshah",
@@ -611,7 +639,8 @@
     "primaries": [
       {
         "name": "tf_weapon_revolver",
-        "weight": 100
+        "weight": 100,
+        "default": true
       },
       {
         "name": "the enforcer",
@@ -625,13 +654,15 @@
     "secondaries": [
       {
         "name": "tf_weapon_sapper",
-        "weight": 10
+        "weight": 10,
+        "default": true
       }
     ],
     "melee": [
       {
         "name": "tf_weapon_knife",
-        "weight": 20
+        "weight": 20,
+        "default": true
       },
       {
         "name": "the big earner",
