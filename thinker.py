@@ -690,9 +690,9 @@ class Coordinator:
                 tfbot_strength *= ai_info['bot_boss_strength_mult']
             # print(f'TFBot strength: {tfbot_strength}, Max and total: {maxactive}, {totalcount}')
             if chosen == 'giant':
-                eligible = self.get_templates_eligible(tfbot_strength + ai_info['bot_giant_search_add'], ai_info['strength_variance'], ['engineer', 'medic', 'sniper', 'spy'], chosen)
+                eligible = self.get_templates_eligible(tfbot_strength + ai_info['bot_giant_search_add'], ai_info['strength_variance'], ['engineer', 'medic', 'spy'], chosen)
             else:
-                eligible = self.get_templates_eligible(tfbot_strength, ai_info['strength_variance'], ['engineer', 'medic', 'sniper', 'spy'], chosen)
+                eligible = self.get_templates_eligible(tfbot_strength, ai_info['strength_variance'], ['engineer', 'medic', 'spy'], chosen)
             if chosen == 'boss':
                 if eligible and not self.current_wave_rules['custom_only'] and not ai_info['bot_boss_custom_only']:
                     template = random.choice(eligible)
@@ -1190,12 +1190,13 @@ class Coordinator:
             strength = self.get_tfbot_strength(tfbot)
             self.bot_templates_strengths.append((tfbot, strength))
 
-    def get_templates_eligible(self, strength: float, variance: float, restrictions: list, kind: str=None, ignore_used: bool=False) -> list:
+    def get_templates_eligible(self, strength: float, variance: float, restrictions: list, kind: str=None, ignore_used: bool=False, support_bot: bool=False) -> list:
         """Get tfbots within templates with the specified strength and within the range
         of (1-variance) * strength, strength * (1+variance).
         restrictions is simply a list of what classes not to select.
         kind only allows this kind of tfbot.
-        ignore_used tells this function to still consider previously used templates."""
+        ignore_used tells this function to still consider previously used templates.
+        support_bot if set to true allows any template using a support exclsuive weapon to be used"""
         strength_min = strength * (1 - variance)
         strength_max = strength * (1 + variance)
         eligible = []
@@ -1204,7 +1205,18 @@ class Coordinator:
             restrict = restrict and b.get_kv('ClassIcon', '', True) != 'sentry_buster'
             if strength_min < s[2] < strength_max and restrict:
                 tfbot_attributes = b.get_kv('Attributes', [])
-                if kind:
+
+                tfbot_weapon_info = self.get_tfbot_weapon(b)
+                if support_bot:
+                    weapon_valid = True
+                else:
+                    if tfbot_weapon_info.get('support_only', False):
+                        weapon_valid = True
+                    else:
+                        # Skip classes without valid weapons
+                        continue
+
+                if kind and weapon_valid:
                     if kind == 'boss' and 'UseBossHealthBar' in tfbot_attributes:
                         eligible.append(b)
                     elif kind == 'giant' and 'MiniBoss' in tfbot_attributes and 'UseBossHealthBar' not in tfbot_attributes:
@@ -1235,6 +1247,31 @@ class Coordinator:
             # power, endurance, strength
             self.bot_templates_strengths.append((new_template, (strength / 2, strength / 2, strength)))
         return new_template
+
+    def get_tfbot_weapon(self, bot: TFBot):
+        """This function gets the first non passive weapon a bot is using,
+        and returns the relevant info of the weapon from config_classes.json.
+        If no weapon is found, then it will return the first weapon it finds with default set to true."""
+        tfbot_class = bot.get_kv('Class').lower()
+        tfbot_class = 'heavy' if 'heavy' in tfbot_class else tfbot_class  # Check for heavyweapons
+        tfbot_restrict = bot.get_kv('WeaponRestrictions', 'PrimaryOnly', True)
+
+        weapon_dict = {'PrimaryOnly': 'primaries', 'SecondaryOnly': 'secondaries', 'MeleeOnly': 'melee'}
+        weapon_type = weapon_dict[tfbot_restrict]
+
+        tfbot_weapons = bot.get_kv('Item', [])
+        class_weapons = class_info[tfbot_class][weapon_type]
+        for possible_weapon in class_weapons:
+            for tfbot_weapon in tfbot_weapons:
+                if possible_weapon.get('name') == tfbot_weapon and not possible_weapon.get('passive'):
+                    return possible_weapon
+
+        # If no weapons get returned, chose the default weapon
+        for possible_weapon in class_weapons:
+            if possible_weapon.get('default', False) is True:
+                return possible_weapon
+
+        return False
 
     def get_tfbot_strength(self, bot: TFBot) -> tuple:
         """Calculate the strength of a tfbot from its power and endurance.
@@ -1416,11 +1453,11 @@ class Coordinator:
         new_rules['strength_add'] += rules.get('strength_add', 0)
         new_rules['cash_add'] += rules.get('cash_add', 0)
 
-        new_rules['subwaves'] = rules.get('subwaves', -1)
-        new_rules['bot_amount'] = rules.get('bot_amount', -1)
-        new_rules['bot_types'] = rules.get('bot_types', -1)
-        new_rules['custom_only'] = rules.get('custom_only', False)
-        new_rules['support_allowed'] = rules.get('support_allowed', False)
+        new_rules['subwaves'] = rules.get('subwaves', new_rules.get('subwaves', -1))
+        new_rules['bot_amount'] = rules.get('bot_amount', new_rules.get('bot_amount', -1))
+        new_rules['bot_types'] = rules.get('bot_types', new_rules.get('bot_types', -1))
+        new_rules['custom_only'] = rules.get('custom_only', new_rules.get('custom_only', False))
+        new_rules['support_allowed'] = rules.get('support_allowed', new_rules.get('support_allowed', False))
 
         includes = rules.get('must_include', [])
         if includes != []:
