@@ -684,14 +684,15 @@ class Coordinator:
 
             # Determine the spawner (aka robots) to use
             # As the spawncount goes up, the strength per tfbot goes down
-            tfbot_strength = strength_per / math.ceil(maxactive * 0.5) * math.ceil(spawncount * 0.5)
-            # print(f'Strength: {tfbot_strength}, MaxActive: {maxactive}, SpawnCount: {spawncount}')
             if chosen == 'boss':
+                tfbot_strength = ai_info['bot_strength_giant_min'] + strength_per / math.ceil(maxactive * 0.5) * math.ceil(spawncount * 0.5)
                 tfbot_strength *= ai_info['bot_boss_strength_mult']
             # print(f'TFBot strength: {tfbot_strength}, Max and total: {maxactive}, {totalcount}')
             if chosen == 'giant':
+                tfbot_strength = ai_info['bot_strength_giant_min'] + strength_per / math.ceil(maxactive * 0.5) * math.ceil(spawncount * 0.5)
                 eligible = self.get_templates_eligible(tfbot_strength + ai_info['bot_giant_search_add'], ai_info['strength_variance'], ['engineer', 'medic', 'spy'], chosen)
             else:
+                tfbot_strength = ai_info['bot_strength_min'] + strength_per / math.ceil(maxactive * 0.5) * math.ceil(spawncount * 0.5)
                 eligible = self.get_templates_eligible(tfbot_strength, ai_info['strength_variance'], ['engineer', 'medic', 'spy'], chosen)
             if chosen == 'boss':
                 if eligible and not self.current_wave_rules['custom_only'] and not ai_info['bot_boss_custom_only']:
@@ -1129,10 +1130,12 @@ class Coordinator:
                             passive_attributes_re[quotify(k)] = passive_attributes[k]
                         else:
                             primary_character_attributes[quotify(k)] = passive_attributes[k]
+                    else:
+                        passive_attributes_re[quotify(k)] = passive_attributes[k]
                 if passive_attributes_re != {}:
                     pa = Attributes('ItemAttributes', [])
                     pa.kvs['ItemName'] = [quotify(picked_passive.get('name'))]
-                    pa.copy(passive_attributes)
+                    pa.copy(passive_attributes_re)
                     tfbot.item_attributes.append(pa)
                     tfbot.all_subtrees.append(pa)
             tfbot.set_kv('Item', quotify(picked_passive.get('name')))
@@ -1210,7 +1213,7 @@ class Coordinator:
                 if support_bot:
                     weapon_valid = True
                 else:
-                    if tfbot_weapon_info.get('support_only', False):
+                    if not tfbot_weapon_info.get('support_only', False):
                         weapon_valid = True
                     else:
                         # Skip classes without valid weapons

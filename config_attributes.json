@@ -34,7 +34,7 @@
         "name": "heal on hit for rapidfire",
         "type": "endurance",
         "operator": "percentage_add",
-        "mult": 0.2,
+        "mult": 0.25,
         "def": 0,
         "alt": ["health on radius damage"]
     }, {
