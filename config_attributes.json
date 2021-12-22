@@ -4,7 +4,7 @@
         "type": "power",
         "inverse": "damage penalty",
         "operator": "exp",
-        "base": 2.5,
+        "base": 2,
         "def": 1
     }, {
         "name": "fire rate bonus",
@@ -406,6 +406,11 @@
             "min": 0.02,
             "max": 0.8,
             "step": 0.1
+        },{
+            "name": "dmg penalty vs players",
+            "min": 1,
+            "max": 10,
+            "step": 0.25
         }],
         "attributes_melee": [{
             "name": "damage bonus",
@@ -427,6 +432,11 @@
             "min": 0,
             "max": 20000,
             "step": 20
+        },{
+            "name": "dmg penalty vs players",
+            "min": 1,
+            "max": 5,
+            "step": 0.25
         }],
         "whitelist_primary": ["damage bonus", "fire rate bonus", "faster reload rate", "clip size bonus"],
         "whitelist_secondary": ["damage bonus", "clip size bonus", "fire rate penalty", "faster reload rate", "critboost on kill"],
@@ -485,6 +495,7 @@
             },
             "bonk! atomic punch": {
                 "power_base": 20,
+                "strength_mult": 1.5,
                 "override": {
                     "mult_item_meter_charge_rate": {
                         "min": 0.5,

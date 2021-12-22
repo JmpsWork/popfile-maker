@@ -1,5 +1,6 @@
 """Main file to run."""
 import thinker
+import botutils
 from func_extras import colored_text
 
 coordinator = thinker.Coordinator([])
@@ -22,7 +23,7 @@ def command_create_tfbot(strength: int, tfbot_kind: str='common', tfbot_class: s
     restrict (int) (optional) - 0 for PrimaryOnly, 1 for SecondaryOnly or 2 for MeleeOnly."""
     strength = float(strength)
     restrict = int(restrict)
-    t = coordinator.create_tfbot(strength=strength, tfbot_kind=tfbot_kind, tfbot_class=tfbot_class, restriction=restrict)
+    t = botutils.create_tfbot(strength=strength, tfbot_kind=tfbot_kind, tfbot_class=tfbot_class, restriction=restrict)
     print(colored_text('\nNew bot:\n', 34))
     print(t.string_spaced())
     print()

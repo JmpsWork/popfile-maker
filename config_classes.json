@@ -10,83 +10,118 @@
       {
         "name": "tf_weapon_scattergun",
         "weight": 50,
-        "default": true
+        "default": true,
+        "icon_giant": "scout_giant"
       },
       {
         "name": "the soda popper",
-        "weight": 15
+        "weight": 15,
+        "icon": "scout_pop",
+        "icon_giant": "scout_pop_giant"
       },
       {
         "name": "the force-a-nature",
-        "weight": 15
+        "weight": 15,
+        "icon": "scout_fan",
+        "icon_giant": "scout_fan_giant"
       },
       {
         "name": "baby face's blaster",
-        "weight": 10
+        "weight": 10,
+        "icon": "scout_blaster_nys",
+        "icon_giant": "scout_blaster_nys_giant"
       },
       {
         "name": "the shortstop",
-        "weight": 20
+        "weight": 20,
+        "icon": "scout_shortstop",
+        "icon_giant": "scout_shortstop_giant"
       }
     ],
     "secondaries": [
       {
         "name": "tf_weapon_pistol_scout",
         "weight": 40,
-        "default": true
+        "default": true,
+        "icon": "scout_pistol_nys",
+        "icon_giant": "scout_pistol_nys_giant"
       },
       {
         "name": "the winger",
-        "weight": 20
+        "weight": 20,
+        "icon": "scout_pistol_nys",
+        "icon_giant": "scout_pistol_nys_giant"
       },
       {
         "name": "pretty boy's pocket pistol",
-        "weight": 20
+        "weight": 20,
+        "icon": "scout_pocketpistol",
+        "icon_giant": "scout_pocketpistol"
       },
       {
         "name": "crit-a-cola",
         "passive": true,
-        "weight": 20
+        "weight": 20,
+        "icon": "scout_cola",
+        "icon_giant": "scout_cola_giant"
       },
       {
         "name": "bonk! atomic punch",
         "passive": true,
-        "weight": 20
+        "weight": 20,
+        "icon": "scout_bonk",
+        "icon_giant": "scout_bonk_giant"
       },
       {
         "name": "mad milk",
-        "weight": 10
+        "weight": 10,
+        "icon": "scout_milk",
+        "icon_giant": "scout_milk_giant"
       },
       {
         "name": "the flying guillotine",
-        "weight": 5
+        "weight": 5,
+        "icon": "scout_guillotine",
+        "icon_giant": "scout_guillotine_giant"
       }
     ],
     "melee": [
       {
         "name": "tf_weapon_bat",
         "weight": 30,
-        "default": true
+        "default": true,
+        "icon": "scout_bat",
+        "icon_giant": "scout_bat_giant"
       },
       {
         "name": "the holy mackerel",
-        "weight": 30
+        "weight": 30,
+        "icon": "scout_bat",
+        "icon_giant": "scout_bat_giant"
       },
       {
         "name": "sun-on-a-stick",
-        "weight": 10
+        "weight": 10,
+        "icon": "scout_sunstick",
+        "icon_giant": "scout_sunstick"
       },
       {
         "name": "the atomizer",
-        "weight": 20
+        "weight": 20,
+        "icon": "scout_bat",
+        "icon_giant": "scout_bat_giant"
       },
       {
         "name": "the sandman",
-        "weight": 20
+        "weight": 20,
+        "icon": "scout_stun",
+        "icon_giant": "scout_stun_giant"
       },
       {
         "name": "the fan o'war",
-        "weight": 20
+        "weight": 20,
+        "icon": "scout_fanowar",
+        "icon_giant": "scout_fanowar_giant"
       }
     ]
   },
@@ -102,66 +137,85 @@
         "name": "tf_weapon_rocketlauncher",
         "burst": 1,
         "weight": 50,
-        "default": true
+        "default": true,
+        "icon_giant": "soldier_giant"
       },
       {
         "name": "the original",
         "burst": 1,
-        "weight": 20
+        "weight": 20,
+        "icon_giant": "soldier_giant"
       },
       {
         "name": "the cow mangler 5000",
         "burst": 1,
-        "weight": 20
+        "weight": 20,
+        "icon_giant": "soldier_giant"
       },
       {
         "name": "the direct hit",
         "burst": 1,
-        "weight": 20
+        "weight": 20,
+        "icon_giant": "soldier_giant"
       },
       {
         "name": "the black box",
         "burst": 2,
-        "weight": 10
+        "weight": 10,
+        "icon": "soldier_blackbox",
+        "icon_giant": "soldier_blackbox_giant"
       },
       {
         "name": "the liberty launcher",
         "burst": 2,
-        "weight": 10
+        "weight": 10,
+        "icon_giant": "soldier_giant"
       }
     ],
     "secondaries": [
       {
         "name": "tf_weapon_shotgun_soldier",
         "weight": 60,
-        "default": true
+        "default": true,
+        "icon": "shotgun_lite",
+        "icon_giant": "shotgun_lite"
       },
       {
         "name": "the righteous bison",
         "weight": 60,
-        "alwaysfire": 1
+        "alwaysfire": 1,
+        "icon": "soldier_bison",
+        "icon_giant": "soldier_bison_giant"
       },
       {
         "name": "the reserve shooter",
-        "weight": 10
+        "weight": 10,
+        "icon": "shotgun_reserve_lite",
+        "icon_giant": "shotgun_reserve_lite"
       },
       {
         "name": "the concheror",
         "passive": true,
         "charge": true,
-        "weight": 60
+        "weight": 60,
+        "icon": "soldier_conch",
+        "icon_giant": "soldier_conch_giant"
       },
       {
         "name": "the battalion's backup",
         "passive": true,
         "charge": true,
-        "weight": 40
+        "weight": 40,
+        "icon": "soldier_backup",
+        "icon_giant": "soldier_backup_giant"
       },
       {
         "name": "the buff banner",
         "passive": true,
         "charge": true,
-        "weight": 80
+        "weight": 80,
+        "icon": "soldier_buff",
+        "icon_giant": "soldier_buff_giant"
       },
       {
         "name": "the gunboats",
@@ -178,23 +232,33 @@
       {
         "name": "tf_weapon_shovel",
         "weight": 10,
-        "default": true
+        "default": true,
+        "icon": "soldier_shovel",
+        "icon_giant": "soldier_shovel"
       },
       {
         "name": "the market gardener",
-        "weight": 10
+        "weight": 10,
+        "icon": "soldier_shovel",
+        "icon_giant": "soldier_shovel"
       },
       {
         "name": "the half-zatoichi",
-        "weight": 40
+        "weight": 40,
+        "icon": "demoknight_samurai",
+        "icon_giant": "demoknight_samurai_giant"
       },
       {
         "name": "the escape plan",
-        "weight": 50
+        "weight": 50,
+        "icon": "soldier_pickaxe_escape",
+        "icon_giant": "soldier_pickaxe_escape"
       },
       {
         "name": "the equalizer",
-        "weight": 50
+        "weight": 50,
+        "icon": "soldier_pickaxe_equalize",
+        "icon_giant": "soldier_pickaxe_equalize"
       }
     ]
   },
@@ -209,60 +273,81 @@
       {
         "name": "tf_weapon_flamethrower",
         "weight": 100,
-        "default": true
+        "default": true,
+        "icon_giant": "pyro_giant"
       },
       {
         "name": "the degreaser",
-        "weight": 10
+        "weight": 10,
+        "icon_giant": "pyro_giant"
       },
       {
         "name": "the dragon's fury",
         "weight": 40,
-        "maxvision": 850
+        "maxvision": 850,
+        "icon": "pyro_dragonfury_swordstone",
+        "icon_giant": "pyro_dragonfury_swordstone_giant"
       },
       {
         "name": "the backburner",
         "alt": ["festive backburner 2014"],
-        "weight": 30
+        "weight": 30,
+        "icon_giant": "pyro_giant"
       },
       {
         "name": "the phlogistinator",
         "charge": true,
-        "weight": 50
+        "weight": 50,
+        "icon": "pyro_phlog",
+        "icon_giant": "pyro_phlog_giant"
       }
     ],
     "secondaries": [
       {
         "name": "tf_weapon_shotgun_pyro",
         "weight": 10,
-        "default": true
+        "default": true,
+        "icon": "shotgun_lite",
+        "icon_giant": "shotgun_lite"
       },
       {
         "name": "the flare gun",
-        "weight": 30
+        "weight": 30,
+        "icon": "pyro_flare",
+        "icon_giant": "pyro_flare_giant"
       },
       {
         "name": "the scorch shot",
-        "weight": 30
+        "weight": 30,
+        "icon": "pyro_scorch",
+        "icon_giant": "pyro_scorch_giant"
       },
       {
         "name": "the detonator",
-        "weight": 30
+        "weight": 30,
+        "icon": "pyro_flare",
+        "icon_giant": "pyro_flare_giant"
       }
     ],
     "melee": [
       {
         "name": "tf_weapon_axe",
         "weight": 20,
-        "default": true
+        "default": true,
+        "icon": "pyro_fireaxe_lite",
+        "icon_giant": "pyro_fireaxe_lite_giant"
       },
       {
         "name": "the back scratcher",
-        "weight": 100
+        "weight": 100,
+        "icon": "pyro_backscratcher_lite",
+        "icon_giant": "pyro_backscratcher_lite"
       },
       {
         "name": "the neon annihilator",
-        "weight": 40
+        "weight": 40,
+        "icon": "pyro_neon",
+        "icon_giant": "pyro_neon_giant"
       }
     ]
   },
@@ -278,17 +363,20 @@
         "name": "tf_weapon_grenadelauncher",
         "burst": 1,
         "weight": 100,
-        "default": true
+        "default": true,
+        "icon_giant": "demo_giant"
       },
       {
         "name": "the iron bomber",
         "burst": 1,
-        "weight": 80
+        "weight": 80,
+        "icon_giant": "demo_giant"
       },
       {
         "name": "the loch-n-load",
         "burst": 2,
-        "weight": 30
+        "weight": 30,
+        "icon_giant": "demo_giant"
       },
       {
         "name": "the bootlegger",
@@ -301,7 +389,9 @@
       {
         "name": "tf_weapon_pipebomblauncher",
         "weight": 100,
-        "default": true
+        "default": true,
+        "icon": "demo_sticky_daan",
+        "icon_giant": "demo_sticky_daan_giant"
       },
       {
         "name": "the chargin' targe",
@@ -323,27 +413,37 @@
       {
         "name": "tf_weapon_bottle",
         "weight": 20,
-        "default": true
+        "default": true,
+        "icon": "demoknight_bottle_lite",
+        "icon_giant": "demoknight_bottle_lite"
       },
       {
         "name": "the eyelander",
         "weight": 30,
-        "passive_chance": 1
+        "passive_chance": 1,
+        "icon": "demoknight",
+        "icon_giant": "demoknight_giant"
       },
       {
         "name": "the persian persuader",
         "weight": 20,
-        "passive_chance": 1
+        "passive_chance": 1,
+        "icon": "demoknight_persian_nys",
+        "icon_giant": "demoknight_persion_nys_giant"
       },
       {
         "name": "the half-zatoichi",
         "weight": 20,
-        "passive_chance": 1
+        "passive_chance": 1,
+        "icon": "demoknight_samurai",
+        "icon_giant": "demoknight_samurai_giant"
       },
       {
         "name": "the claidheamohmor",
         "weight": 20,
-        "passive_chance": 1
+        "passive_chance": 1,
+        "icon": "demoknight",
+        "icon_giant": "demoknight_giant"
       }
     ]
   },
@@ -360,29 +460,39 @@
         "alt": ["iron curtain"],
         "weight": 100,
         "maxvision": 1200,
-        "default": true
+        "default": true,
+        "icon_giant": "heavy_giant"
       },
       {
         "name": "the huo long heatmaker",
-        "weight": 30
+        "weight": 30,
+        "icon": "heavy_heater",
+        "icon_giant": "heavy_heater_giant"
       },
       {
         "name": "the brass beast",
         "weight": 40,
-        "maxvision": 1200
+        "maxvision": 1200,
+        "icon": "heavy_brass",
+        "icon_giant": "heavy_brass_giant"
       },
       {
         "name": "tomislav",
-        "weight": 30
+        "weight": 30,
+        "icon_giant": "heavy_giant"
       },
       {
         "name": "natascha",
         "weight": 40,
-        "maxvision": 1200
+        "maxvision": 1200,
+        "icon": "heavy_natascha",
+        "icon_giant": "heavy_natascha_giant"
       },
       {
         "name": "deflector",
-        "weight": 40
+        "weight": 40,
+        "icon": "heavy_deflector",
+        "icon_giant": "heavy_deflector"
       }
     ],
     "secondaries": [
@@ -390,12 +500,16 @@
         "name": "tf_weapon_shotgun_hwg",
         "weight": 100,
         "maxvision": 1200,
-        "default": true
+        "default": true,
+        "icon": "heavy_shotgun",
+        "icon_giant": "heavy_shotgun"
       },
       {
         "name": "the family business",
         "weight": 30,
-        "maxvision": 1200
+        "maxvision": 1200,
+        "icon": "heavy_family_business",
+        "icon_giant": "heavy_family_business"
       },
       {
         "name": "the robo-sandvich",
@@ -412,24 +526,34 @@
       {
         "name": "tf_weapon_fists",
         "weight": 10,
-        "default": true
+        "default": true,
+        "icon": "heavy_fist_nys",
+        "icon_giant": "heavy_fist_nys_giant"
       },
       {
         "name": "fists of steel",
-        "weight": 90
+        "weight": 90,
+        "icon": "heavy_steelfist",
+        "icon_giant": "heavy_steelfist"
       },
       {
         "name": "gloves of running urgently mvm",
-        "weight": 80
+        "weight": 80,
+        "icon": "heavy_gru",
+        "icon_giant": "heavy_gru"
       },
       {
         "name": "the killing gloves of boxing",
-        "weight": 80
+        "weight": 80,
+        "icon": "heavy_champ",
+        "icon_giant": "heavy_champ"
       },
       {
         "name": "warrior's spirit",
         "weight": 40,
-        "passive_chance": 1
+        "passive_chance": 1,
+        "icon": "heavy_warrior",
+        "icon_giant": "heavy_warrior_giant"
       }
     ]
   },
@@ -446,45 +570,59 @@
       {
         "name": "tf_weapon_shotgun_primary",
         "weight": 20,
-        "default": true
+        "default": true,
+        "icon_giant": "engineer_giant"
       },
       {
         "name": "the frontier justice",
-        "weight": 20
+        "weight": 20,
+        "icon": "engineer_frontier_justice_nys",
+        "icon_giant": "engineer_frontier_justice_nys_giant"
       },
       {
         "name": "the widowmaker",
-        "weight": 20
+        "weight": 20,
+        "icon": "engineer_widowmaker_nys",
+        "icon_giant": "engineer_widowmaker_nys_giant"
       }
     ],
     "secondaries": [
       {
         "name": "tf_weapon_pistol",
         "weight": 100,
-        "default": true
+        "default": true,
+        "icon": "scout_pistol_nys",
+        "icon_giant": "scout_pistol_nys_giant"
       },
       {
         "name": "the short circuit",
-        "weight": 20
+        "weight": 20,
+        "icon": "engineer_shortcircuit_lite",
+        "icon_giant": "engineer_shortcircuit_lite_giant"
       }
     ],
     "melee": [
       {
         "name": "tf_weapon_wrench",
         "weight": 20,
-        "default": true
+        "default": true,
+        "icon_giant": "engineer_giant"
       },
       {
         "name": "the jag",
-        "weight": 20
+        "weight": 20,
+        "icon_giant": "engineer_giant"
       },
       {
         "name": "the eureka effect",
-        "weight": 20
+        "weight": 20,
+        "icon_giant": "engineer_giant"
       },
       {
         "name": "the gunslinger",
-        "weight": 20
+        "weight": 20,
+        "icon": "engineer_minisentry_nys",
+        "icon_giant": "engineer_minisentry_nys"
       }
     ]
   },
@@ -499,15 +637,21 @@
       {
         "name": "tf_weapon_syringegun",
         "weight": 20,
-        "default": true
+        "default": true,
+        "icon": "medic_syringe",
+        "icon_giant": "medic_syringe_giant"
       },
       {
         "name": "the crusader's crossbow",
-        "weight": 20
+        "weight": 20,
+        "icon": "medic_crossbow",
+        "icon_giant": "medic_crossbow_giant"
       },
       {
         "name": "the blutsauger",
-        "weight": 20
+        "weight": 20,
+        "icon": "medic_blutsauger",
+        "icon_giant": "medic_blutsauger_giant"
       }
     ],
     "secondaries": [
@@ -515,32 +659,30 @@
         "name": "tf_weapon_medigun",
         "charge": true,
         "weight": 30,
-        "default": true
+        "default": true,
+        "icon_giant": "medic_giant"
       },
       {
         "name": "the quick-fix",
         "charge": true,
-        "weight": 40
+        "weight": 40,
+        "icon_giant": "medic_giant"
       },
       {
         "name": "the kritzkrieg",
         "charge": true,
-        "weight": 20
+        "weight": 20,
+        "icon": "medic_kritz",
+        "icon_giant": "medic_kritz_giant"
       }
     ],
     "melee": [
       {
         "name": "tf_weapon_bonesaw",
         "weight": 20,
-        "default": true
-      },
-      {
-        "name": "tf_weapon_bonesaw",
-        "weight": 20
-      },
-      {
-        "name": "tf_weapon_bonesaw",
-        "weight": 20
+        "default": true,
+        "icon": "medic_battle",
+        "icon_giant": "medic_battle"
       }
     ]
   },
@@ -558,42 +700,55 @@
         "name": "tf_weapon_sniperrifle",
         "weight": 40,
         "support_only": true,
-        "default": true
+        "default": true,
+        "icon_giant": "sniper_giant"
       },
       {
         "name": "the sydney sleeper",
         "weight": 40,
-        "support_only": true
+        "support_only": true,
+        "icon": "sniper_jarate",
+        "icon_giant": "sniper_jarate_giant"
       },
       {
         "name": "the huntsman",
-        "weight": 40
+        "weight": 40,
+        "icon": "sniper_bow",
+        "icon_giant": "sniper_bow_giant"
       },
       {
         "name": "the machina",
         "weight": 30,
-        "support_only": true
+        "support_only": true,
+        "icon_giant": "sniper_giant"
       },
       {
         "name": "the bazaar bargain",
         "weight": 20,
         "passive_chance": 1,
-        "support_only": true
+        "support_only": true,
+        "icon_giant": "sniper_giant"
       }
     ],
     "secondaries": [
       {
         "name": "tf_weapon_smg",
         "weight": 100,
-        "default": true
+        "default": true,
+        "icon": "sniper_smg",
+        "icon_giant": "sniper_smg_giant"
       },
       {
         "name": "the cleaner's carbine",
-        "weight": 80
+        "weight": 80,
+        "icon": "sniper_carbine",
+        "icon_giant": "sniper_carbine_giant"
       },
       {
         "name": "jarate",
-        "weight": 30
+        "weight": 30,
+        "icon": "sniper_jarate",
+        "icon_giant": "sniper_jarate_giant"
       },
       {
         "name": "the razorback",
@@ -615,15 +770,21 @@
       {
         "name": "tf_weapon_kukri",
         "weight": 20,
-        "default": true
+        "default": true,
+        "icon": "sniper_kukri_lite",
+        "icon_giant": "sniper_kukri_lite"
       },
       {
         "name": "the shahanshah",
-        "weight": 50
+        "weight": 50,
+        "icon": "sniper_kukri_lite",
+        "icon_giant": "sniper_kukri_lite"
       },
       {
         "name": "the bushwacka",
-        "weight": 20
+        "weight": 20,
+        "icon": "sniper_bushwacka",
+        "icon_giant": "sniper_bushwacka_giant"
       }
     ]
   },
@@ -640,15 +801,21 @@
       {
         "name": "tf_weapon_revolver",
         "weight": 100,
-        "default": true
+        "default": true,
+        "icon": "spy_revolver_lite",
+        "icon_giant": "spy_revolver_lite"
       },
       {
         "name": "the enforcer",
-        "weight": 80
+        "weight": 80,
+        "icon": "spy_enforcer_nys",
+        "icon_giant": "spy_enforcer_nys_giant"
       },
       {
         "name": "the diamondback",
-        "weight": 40
+        "weight": 40,
+        "icon": "spy_revolver_lite",
+        "icon_giant": "spy_revolver_lite"
       }
     ],
     "secondaries": [
@@ -662,19 +829,24 @@
       {
         "name": "tf_weapon_knife",
         "weight": 20,
-        "default": true
+        "default": true,
+        "icon_giant": "spy_giant"
       },
       {
         "name": "the big earner",
-        "weight": 20
+        "weight": 20,
+        "icon_giant": "spy_giant"
       },
       {
         "name": "conniver's kunai",
-        "weight": 20
+        "weight": 20,
+        "icon": "spy_kunai",
+        "icon_giant": "spy_kunai_giant"
       },
       {
         "name": "your eternal reward",
-        "weight": 20
+        "weight": 20,
+        "icon_giant": "spy_giant"
       }
     ]
   }
