@@ -66,33 +66,6 @@ WaveSchedule
 			}
 		}
 		
-		T_TFBot_Soldier_Tau_Cannon // A Soldier that tries to recreate the power of the Tau Cannon from half life 1. Add crits for extra trolling
-		{
-		    Class Soldier
-			Name "Tau Cannon Soldier"
-			ClassIcon soldier_mangler
-			Skill Expert
-			
-			Item "The Cow Mangler 5000"
-			Item "The Sightliner"
-			
-			ItemAttributes
-			{
-			    ItemName "The Cow Mangler 5000"
-				"set item tint RGB" 13595446
-				"fire rate penalty" 2.5
-				"damage bonus" 3.5
-				"override projectile type" 13
-				"Projectile speed increased" 4.0
-			}
-			
-			ItemAttributes
-			{
-			    ItemName "The Sightliner"
-				"set item tint RGB" 13595446
-			}
-		}
-		
 		// Pyros
 		
 		T_TFBot_Pyro_Fury // Dragon's fury pyro

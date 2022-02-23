@@ -675,6 +675,7 @@
             },
             "the battalion's backup": {
                 "power_base": 100,
+                "strength_mult": 1.3,
                 "default": {
                     "max health additive bonus": 20
                 },

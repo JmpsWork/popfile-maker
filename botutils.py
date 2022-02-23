@@ -63,7 +63,7 @@ def apply_attribute_values(define: dict, value: float, strength, power, enduranc
     return float(strength), float(power), float(endurance)
 
 
-def assign_attributes(tfbot_class: str, weapon: str, strength: float, s_attributes: list, amount: int, priority: list) -> dict:
+def assign_attributes(tfbot_class: str, weapon: str, base_strength: float, desired_strength: float, s_attributes: list, amount: int, priority: list) -> dict:
     """Picks a certain amount of weapon attributes, with priority ones chosen first,
     and then assigns them values based on the weapon and desired strength.
     Returns a dict with the weapon attributes."""
@@ -71,6 +71,7 @@ def assign_attributes(tfbot_class: str, weapon: str, strength: float, s_attribut
     # List needs to be copied or else it will override the whitelist in config_attributes.json
     attributes = s_attributes.copy()
     used_attributes = []
+    total_attributes = amount
 
     # Remove duplicates
     for i, a in enumerate(priority):
@@ -106,10 +107,7 @@ def assign_attributes(tfbot_class: str, weapon: str, strength: float, s_attribut
             elif op in ['add', 'mult_add', 'percentage_add']:
                 adders.append(attr_info)
 
-    base_power = all_classes[tfbot_class].get('power', 100)
     weapon_info = get_weapon_info(tfbot_class, weapon)
-    if weapon_info[0].get('base_power', False):
-        base_power = weapon_info[0].get('base_power', False)
 
     final_attributes = {}  # Attribute: value
     deviance_amount = 0  # The amount of 'deviant' attributes used
@@ -123,11 +121,17 @@ def assign_attributes(tfbot_class: str, weapon: str, strength: float, s_attribut
     # Then, find the original value that comes closest to that attribute strength value.
 
     # Do adders first, then mults second
-    if attribute_amount != 0:
-        strength_per_adder = abs(strength / attribute_amount - base_power)
-        strength_per_mult = abs(strength / attribute_amount - base_power)
+    #if attribute_amount != 0:
+    #    strength_per_adder = abs(desired_strength / attribute_amount - base_strength)
+    #    strength_per_mult = abs(desired_strength / attribute_amount - base_strength)
+    #else:
+    #    strength_per_adder, strength_per_mult = 0, 0
+
+    # Every time an attribute gets applied, add the new strength to this for future comparisons
+    if attribute_amount:
+        cumulative_strength = abs(desired_strength / attribute_amount + base_strength)
     else:
-        strength_per_adder, strength_per_mult = 0, 0
+        cumulative_strength = base_strength
 
     for add in adders:
         # Duplicate of the other for loop but I don't care
@@ -136,15 +140,16 @@ def assign_attributes(tfbot_class: str, weapon: str, strength: float, s_attribut
         if possible_values is False:
             print(colored_text(f'Unknown attribute "{add.get("name")}" for class "{tfbot_class}"! Attribute skipped.', 93))
             continue
-        strength_values = list(map(lambda x: operator(add.get('operator', 'none'), x, add.get('base', 1), strength_per_adder, add.get('mult', 1), default), possible_values))
-        possible_strength_values = [abs(p - strength) for p in strength_values]
+        strength_values = list(map(lambda x: operator(add.get('operator', 'none'), x, add.get('base', 1), cumulative_strength / attribute_amount, add.get('mult', 1), default), possible_values))
+        possible_strength_values = [abs(p - desired_strength) for p in strength_values]
         if ai_info['bot_deviance_max'] > deviance_amount and ai_info['bot_deviance_chance'] > random.uniform(0, 1) and attribute_amount != 1:
-            possible_strength_values = [p - strength for p in strength_values]
+            possible_strength_values = [p - desired_strength for p in strength_values]
             v, index = min_index(possible_strength_values)
             deviance_amount += 1
-            strength_per_adder += strength / attribute_amount
         else:
             v, index = min_index(possible_strength_values)
+
+        cumulative_strength += v / attribute_amount
 
         value = possible_values[index]
         attribute_amount -= 1
@@ -159,22 +164,27 @@ def assign_attributes(tfbot_class: str, weapon: str, strength: float, s_attribut
             print(colored_text(f'Unknown attribute "{mult.get("name")}" for class "{tfbot_class}"! Attribute skipped.', 93))
             continue
         # Calculate the strength for each value, and then the closest approximation to our desired strength
-        strength_values = list(map(lambda x: operator(mult.get('operator', 'none'), x, mult.get('base', 1), strength_per_mult, mult.get('mult', 1), default), possible_values))
-        possible_strength_values = [abs(p - strength_per_mult) for p in strength_values]
+        strength_values = list(map(lambda x: operator(mult.get('operator', 'none'), x, mult.get('base', 1), cumulative_strength / attribute_amount, mult.get('mult', 1), default), possible_values))
+        possible_strength_values = [abs(p - desired_strength) for p in strength_values]
 
         if ai_info['bot_deviance_max'] > deviance_amount and ai_info['bot_deviance_chance'] > random.uniform(0, 1) and attribute_amount != 1:
             # Bot deviance tells it to pick a random attribute index instead of the normal min-maxed one
-            possible_strength_values = [p - strength for p in strength_values]
+            possible_strength_values = [p - desired_strength for p in strength_values]
             v, index = min_index(possible_strength_values)
             deviance_amount += 1
             # Upgrade next attribute to compensate
-            strength_per_mult += strength / attribute_amount
+            # strength_per_mult += desired_strength / attribute_amount
         else:
             v, index = min_index(possible_strength_values)
         # Add the value and attribute to all attributes
+        cumulative_strength += v / attribute_amount
+
         value = possible_values[index]
         attribute_amount -= 1
         final_attributes[mult.get('name')] = value
+
+    print(f'{tfbot_class} made, with a desired strength approximating {round((cumulative_strength / desired_strength) * 100)}% using {len(adders) + len(mults)} attributes.')
+    print(f'Desired {round(desired_strength)}, Current: {round(cumulative_strength)}')
 
     final_attributes.update(weapon_attributes)
     return final_attributes
@@ -222,12 +232,11 @@ def get_weapon_info(tfbot_class, weapon: str):
     weapon = weapon.replace('"', '')
     class_weapons = [all_classes[tfbot_class]['primaries'], all_classes[tfbot_class]['secondaries'], all_classes[tfbot_class]['melee']]
     for i, w in enumerate(class_weapons):
-        for slot in w:
+        for i_s, slot in enumerate(w):
             weapon_name = slot.get('name')
             weapon_alts = slot.get('alt', [])
-            # print(f'Comparing {weapon} - to - {weapon_name}')
             if weapon_name == weapon or weapon in weapon_alts:
-                return w[i], i
+                return w[i_s], i
     return 0
 
 
@@ -276,10 +285,10 @@ def operator(kind: str, value: float, base: int, final: float, mult: float=1, de
         return final
 
 
-def odds_value(value: float, slope: float, shift: float) -> float:
+def odds_value(value: float, slope: float, shift: float, num_range: int=1) -> float:
     """Customizable sigmoid function. Input is value,
     slope is how quickly values go from 0 to 1 and shift is how far the midpoint is from 0."""
-    return (math.exp(slope * (value - shift))) / (1 + math.exp(slope * (value - shift)))
+    return num_range * (math.exp(slope * (value - shift))) / (1 + math.exp(slope * (value - shift)))
 
 
 def quotify(string: str) -> str:
@@ -551,14 +560,6 @@ def create_tfbot(strength: float, tfbot_class: str=False, tfbot_kind: str='commo
     base_speed = all_classes[tfbot_class]['speed']
     strength *= ai_info['bot_speed_default'] / base_speed
 
-    tfbot_level = 1  # Rough approximations for strength
-    if tfbot_kind == 'giant':
-        tfbot_level += strength // 300
-    elif tfbot_kind == 'boss':
-        tfbot_level += strength // 1250
-    else:
-        tfbot_level += strength // 75
-
     if not p_e:
         if tfbot_kind == 'common':
             # The HP threshold determines whether to use default health or buffed health
@@ -574,6 +575,7 @@ def create_tfbot(strength: float, tfbot_class: str=False, tfbot_kind: str='commo
                 endurance = round_to_nearest(strength / 2, 100)
             else:
                 endurance = all_classes[tfbot_class]['health_giant']
+            # Power should just be a fraction of the total strength and endurance, change for future
             power = strength - endurance
         elif tfbot_kind == 'boss':
             tfbot_skill = 'expert'
@@ -590,19 +592,32 @@ def create_tfbot(strength: float, tfbot_class: str=False, tfbot_kind: str='commo
         power, endurance = p_e
         power, endurance = round(power), round(endurance)
 
+    tfbot_level = 1  # Very rough approximations for strength
+    if tfbot_kind == 'giant':
+        tfbot_level += abs(strength - all_classes[tfbot_class]['power']) // 300
+    elif tfbot_kind == 'boss':
+        tfbot_level += abs(strength - all_classes[tfbot_class]['power']) // 1250
+    else:
+        tfbot_level += abs(strength - all_classes[tfbot_class]['power']) // 75
+
     # If this bot's hp would be more than the max, clamp it to the max
     if endurance > ai_info['bot_hp_max']:
         endurance = ai_info['bot_hp_max']
-    # Used for attributes
 
+    # Used for attributes
+    base_power = all_classes[tfbot_class]['power']
     if tfbot_skill == 'easy':
         power /= all_classes[tfbot_class]['power_mult_skill'][0]
+        base_power /= all_classes[tfbot_class]['power_mult_skill'][0]
     elif tfbot_skill == 'normal':
         power /= all_classes[tfbot_class]['power_mult_skill'][1]
+        base_power /= all_classes[tfbot_class]['power_mult_skill'][1]
     elif tfbot_skill == 'hard':
         power /= all_classes[tfbot_class]['power_mult_skill'][2]
+        base_power /= all_classes[tfbot_class]['power_mult_skill'][2]
     elif tfbot_skill == 'expert':
         power /= all_classes[tfbot_class]['power_mult_skill'][3]
+        base_power /= all_classes[tfbot_class]['power_mult_skill'][3]
 
     if (tfbot_kind == 'giant' or tfbot_kind == 'boss') and tfbot_class != 'scout':  # Account for move speed penalty
         power *= 2
@@ -672,8 +687,9 @@ def create_tfbot(strength: float, tfbot_class: str=False, tfbot_kind: str='commo
             picked_weapon_whitelist.extend(picked_weapon_info.get('whitelist_extend').copy())
 
     # Starts at 0, increase based on strength
-    if strength > ai_info['bot_attribute_threshold']:
-        attribute_max = strength // ai_info['bot_attribute_giant_per'] if tfbot_kind == 'giant' else strength // ai_info['bot_attribute_per']
+    # If this bot is allowed to benefit from increased power, allow a certain amount of attributes
+    if power > ai_info['bot_attribute_threshold'] and power > base_power:
+        attribute_max = power // ai_info['bot_attribute_giant_per'] if tfbot_kind == 'giant' else power // ai_info['bot_attribute_per']
         attribute_min = attribute_max - 2 if attribute_max - 2 > 1 else 1
         if attribute_min > attribute_max:  # Avoid crash
             attribute_amounts = attribute_max
@@ -703,7 +719,7 @@ def create_tfbot(strength: float, tfbot_class: str=False, tfbot_kind: str='commo
     base_info['Name'] = quotify(tfbot_name)
     # Main weapon Attributes
     attribute_power = power
-    primary_attributes = assign_attributes(tfbot_class, picked_weapon.get('name'), attribute_power, picked_weapon_whitelist, attribute_amounts, picked_weapon_info.get('priority', []))
+    primary_attributes = assign_attributes(tfbot_class, picked_weapon.get('name'), base_power, attribute_power, picked_weapon_whitelist, attribute_amounts, picked_weapon_info.get('priority', []))
     primary_attributes_re = {}
     primary_character_attributes = {}
     for k in primary_attributes.keys():
@@ -771,7 +787,7 @@ def create_tfbot(strength: float, tfbot_class: str=False, tfbot_kind: str='commo
             passive_whitelist = []
 
         if passive_whitelist != []:
-            passive_attributes = assign_attributes(tfbot_class, picked_passive.get('name'), attribute_power, passive_whitelist, attribute_amounts, picked_passive_info.get('priority', []))
+            passive_attributes = assign_attributes(tfbot_class, picked_passive.get('name'), base_power, attribute_power, passive_whitelist, attribute_amounts, picked_passive_info.get('priority', []))
             passive_attributes_re = {}
             for k in passive_attributes.keys():
                 k_info = get_attribute(k)

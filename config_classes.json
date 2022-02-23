@@ -285,8 +285,8 @@
         "name": "the dragon's fury",
         "weight": 40,
         "maxvision": 850,
-        "icon": "pyro_dragonfury_swordstone",
-        "icon_giant": "pyro_dragonfury_swordstone_giant"
+        "icon": "pyro_dragon_fury_swordstone",
+        "icon_giant": "pyro_dragon_fury_swordstone_giant"
       },
       {
         "name": "the backburner",
@@ -660,7 +660,8 @@
         "charge": true,
         "weight": 30,
         "default": true,
-        "icon_giant": "medic_giant"
+        "icon": "medic_uber",
+        "icon_giant": "medic_uber_giant"
       },
       {
         "name": "the quick-fix",

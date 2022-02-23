@@ -364,6 +364,14 @@ class WaveSpawn(Subtree):
     def __repr__(self):
         return f'{self.name} {self.wavename}'
 
+    def has_tank(self):
+        """Returns true if this wavespawn's spawner is a tank.
+        Returns false otherwise."""
+        if isinstance(self.spawner, Tank):
+            return True
+        else:
+            return False
+
     def parse_inner(self):
         super().parse_inner()
         self.wavename = self.get_kv('Name')

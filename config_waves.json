@@ -11,9 +11,9 @@
     ]
   },
   "individual": {
-    "1": {"subwaves": 2},
-    "2": {"subwaves": 3, "support_allowed": true},
-    "6": {"custom_only": true, "subwaves": 4, "support_allowed": true},
-    "7": {"subwaves": 4, "support_allowed": true}
+    "1": {"subwaves": 2, "support_allowed": false},
+    "2": {"subwaves": 3},
+    "6": {"custom_only": true, "subwaves": 4},
+    "7": {"subwaves": 4}
   }
 }

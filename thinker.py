@@ -20,6 +20,42 @@ import os
 import math
 
 
+def select_eligible(eligible_bots: list, class_restrictions: list) -> TFBot:
+    """This function selects an eligible bot from the list of eligible bots provided,
+    while trying to match certain restrictions.
+    The only restriction available is to avoid using certain classes.
+    If no bots are eligible after filtering, a random bot from the original list is chosen instead"""
+    filtered = []
+    for tfbot in eligible_bots:
+        tfbot_class = tfbot.get_kv('Class', None, True)
+        if tfbot_class not in class_restrictions:
+            filtered.append(tfbot)
+    if filtered:
+        return random.choice(filtered)
+    else:
+        return random.choice(eligible_bots)
+
+
+def giant_spawnbetween(spawncount: int, strength: float, stream: bool=False):
+    """This function calculates the spawn delay between each giant group,
+    based on the spawncount and strength."""
+    num_range = 1 if stream else 1.5
+    delay = math.ceil(spawncount * 8 * odds_value(strength, -ai_info['wavespawn_giant_spawn_decrement'], ai_info['wavespawn_giant_spawn_shift'], num_range))
+    return delay
+
+
+def giant_maxactive(spawncount: int, strength: float):
+    """This function calculates the maximum amount of giants that can be active at once,
+    based on the spawncount and strength."""
+    # Lazy fix
+    if strength > 5000:
+        return spawncount * 4
+    elif strength > 2500:
+        return spawncount * 3
+    else:
+        return spawncount * 2
+
+
 class Coordinator:
     """The Coordinator is responsible for coordinating the multiple different
     elements that make up a mission together in a coherent way."""
@@ -83,56 +119,13 @@ class Coordinator:
 
         all_waves = []
         all_mission_support = []
+
         while desired_waves > 1:
             desired_waves -= 1
             money = random.choice(list(float_range(ai_info['cash_per_min'], ai_info['cash_per_max'], 50)))
             wave, support = self.create_wave(money)
-            if ai_info['endless']:
-                # If this is to be 1 big wave, simply dump the wavespawns in to all waves
-                for i, wavespawn_group in enumerate(wave):
-                    for wavespawn in wavespawn_group:
-                        wavespawn.set_kv('Name', f'w{self.current_wave}_{i}')
-                    all_waves.append(wavespawn_group)
-            else:
-                # If this is meant to separate waves, make a Wave instance
-                new_wave = Wave('Wave', [])
-                start_io = WaveIO('StartWaveOutput', [])
-                start_io.set_kv('Target', map_info['relay_start'])
-                start_io.set_kv('Action', 'Trigger')
-                end_io = WaveIO('DoneOutput', [])
-                end_io.set_kv('Target', map_info['relay_end'])
-                end_io.set_kv('Action', 'Trigger')
-                new_wave.io.extend([start_io, end_io])
-                new_wave.all_subtrees.extend([start_io, end_io])
-                for i, wavespawn_group in enumerate(wave):
-                    tank_used = False  # If a tank gets used, use WaitForAllSpawned instead
-                    for wavespawn in wavespawn_group:
-                        if isinstance(wavespawn.spawner, Tank):
-                            tank_used = True
-                        if i != 0 and not tank_used:  # First wavespawns don't have any checks
-                            wavespawn.set_kv('WaitForAllDead', f'w{self.current_wave}_{i - 1}')
-                        elif i != 0 and tank_used:
-                            wavespawn.set_kv('WaitForAllSpawned', f'w{self.current_wave}_{i - 1}')
-                        wavespawn.set_kv('Name', f'w{self.current_wave}_{i}')
-                        new_wave.wavespawns.append(wavespawn)
-                        new_wave.all_subtrees.append(wavespawn)
-                all_waves.append(new_wave)
-                for s in support:
-                    all_mission_support.append(s)
-            print(colored_text(f'Wave {self.current_wave} Strength: {self.wave_strength()}, Current Cash: {self.total_currency}, Wave Cash: {money * self.current_wave_rules["cash_mult"]}', 34))
-            self.current_wave += 1
-            self.total_currency += money * self.current_wave_rules['cash_mult'] + self.current_wave_rules['cash_add']
 
-        if not ai_info['endless']:
-            for wave in all_waves:
-                waveschedule.waves.append(wave)
-                waveschedule.all_subtrees.append(wave)
-            # Missions are only added for non endless missions
-            for mission_support in all_mission_support:
-                waveschedule.missions.append(mission_support)
-                waveschedule.all_subtrees.append(mission_support)
-        else:
-            # UNFINISHED
+            # If this is meant to separate waves, make a Wave instance
             new_wave = Wave('Wave', [])
             start_io = WaveIO('StartWaveOutput', [])
             start_io.set_kv('Target', map_info['relay_start'])
@@ -142,28 +135,35 @@ class Coordinator:
             end_io.set_kv('Action', 'Trigger')
             new_wave.io.extend([start_io, end_io])
             new_wave.all_subtrees.extend([start_io, end_io])
-            d_w, d_i = 1, 0
-            # Figure out how to connect wavespawns in endurance style missions
-            for i, wavespawn_group in enumerate(all_waves):
+
+            for i, wavespawn_group in enumerate(wave):
                 for wavespawn in wavespawn_group:
-                    wavespawn.set_kv('WaitForAllDead', f'w1_{i}')
-                    previous = all_waves[d_w][d_i].get_kv('Name', False, True).split('_')
-                    previous_w, previous_i = int(previous[0].replace('w', '')), int(previous[1])
-                    current = wavespawn.get_kv('Name', False, True).split('_')
-                    current_w, current_i = int(current[0].replace('w', '')), int(current[1])
-                    # print('WaitForAllDead', wavespawn.get_kv('WaitForAllDead', False, True))
-
-                    if d_w != current_w and current_i != d_i:
-                        d_w, d_i = previous_w, previous_i
-                    elif d_i != current_i:
-                        d_i = previous_i
-
-                    print('Name', wavespawn.get_kv('Name', False, True))
-                    print('WaitForAllDead', f'w{d_w}_{d_i}')
+                    # If a tank gets used, use WaitForAllSpawned instead
+                    tank_used = wavespawn.has_tank()
+                    if i != 0 and not tank_used:  # First wavespawns don't have any checks
+                        wavespawn.set_kv('WaitForAllDead', f'w{self.current_wave}_{i - 1}')
+                    elif i != 0 and tank_used:
+                        wavespawn.set_kv('WaitForAllSpawned', f'w{self.current_wave}_{i - 1}')
+                    wavespawn.set_kv('Name', f'w{self.current_wave}_{i}')
                     new_wave.wavespawns.append(wavespawn)
                     new_wave.all_subtrees.append(wavespawn)
-            waveschedule.waves.append(new_wave)
-            waveschedule.all_subtrees.append(new_wave)
+
+            all_waves.append(new_wave)
+
+            for s in support:
+                all_mission_support.append(s)
+
+            print(colored_text(f'Wave {self.current_wave} Strength: {self.wave_strength()}, Current Cash: {self.total_currency}, Wave Cash: {money * self.current_wave_rules["cash_mult"]}', 34))
+            self.current_wave += 1
+            self.total_currency += money * self.current_wave_rules['cash_mult'] + self.current_wave_rules['cash_add']
+
+        for wave in all_waves:
+            waveschedule.waves.append(wave)
+            waveschedule.all_subtrees.append(wave)
+        # Missions are only added for non endless missions
+        for mission_support in all_mission_support:
+            waveschedule.missions.append(mission_support)
+            waveschedule.all_subtrees.append(mission_support)
 
         waveschedule.set_kv('StartingCurrency', self.starting_currency)
         waveschedule.set_kv('RespawnWaveTime', 6)
@@ -295,6 +295,7 @@ class Coordinator:
         wavespawn_stream_made = False
         money_amounts = list(float_range(10, money, 10))
         used = []
+        used_tfbot_classes = []
         used_tanks = 0
         while wavespawn_amount > 0:
             # Determine currency
@@ -339,6 +340,7 @@ class Coordinator:
                 # Tanks also always spawn alone
                 spawncount, maxactive, totalcount = 1, 1, 1
             elif chosen == 'giant':
+
                 # Giants spawn much less than commons
                 if ai_info['wavespawn_gsquad_threshold'] > strength_per:
                     wavespawn_kind = 'regular'
@@ -350,7 +352,8 @@ class Coordinator:
                         chosen_amount = int(weighted_random(ai_info['wavespawn_giant_amount']))
                     else:
                         chosen_amount = 1
-                    spawncount, maxactive, totalcount = chosen_amount, chosen_amount * random.randint(2, 3), chosen_amount * total_groups
+                    spawncount, totalcount = chosen_amount, chosen_amount * total_groups
+                    maxactive = giant_maxactive(spawncount, strength_per)
                 if total_wavespawns == 1:
                     maxactive *= 2
             else:
@@ -390,9 +393,10 @@ class Coordinator:
                     waitbetweenspawns = spawncount // 2
             else:
                 if chosen == 'giant':
-                    waitbetweenspawns = math.ceil(spawncount * 8 * odds_value(strength_per, -ai_info['wavespawn_giant_spawn_decrement'], ai_info['wavespawn_giant_spawn_shift']))
+                    waitbetweenspawns = giant_spawnbetween(spawncount, strength_per)
                 else:
                     waitbetweenspawns = spawncount
+                    # waitbetweenspawns = giant_spawnbetween(spawncount, strength_per, True)
             if wavespawn_kind == 'squad' and chosen != 'giant':
                 waitbetweenspawns //= 2
 
@@ -408,21 +412,22 @@ class Coordinator:
             if chosen == 'boss':
                 tfbot_strength = ai_info['bot_strength_giant_min'] + strength_per / math.ceil(maxactive * 0.5) * math.ceil(spawncount * 0.5)
                 tfbot_strength *= ai_info['bot_boss_strength_mult']
-            # print(f'TFBot strength: {tfbot_strength}, Max and total: {maxactive}, {totalcount}')
             if chosen == 'giant':
                 tfbot_strength = ai_info['bot_strength_giant_min'] + strength_per / math.ceil(maxactive * 0.5) * math.ceil(spawncount * 0.5)
                 eligible = self.get_templates_eligible(tfbot_strength + ai_info['bot_giant_search_add'], ai_info['strength_variance'], ['engineer', 'medic', 'spy'], chosen)
             else:
                 tfbot_strength = ai_info['bot_strength_min'] + strength_per / math.ceil(maxactive * 0.5) * math.ceil(spawncount * 0.5)
                 eligible = self.get_templates_eligible(tfbot_strength, ai_info['strength_variance'], ['engineer', 'medic', 'spy'], chosen)
+
             if chosen == 'boss':
                 if eligible and not self.current_wave_rules['custom_only'] and not ai_info['bot_boss_custom_only']:
-                    template = random.choice(eligible)
+                    template = select_eligible(eligible, used_tfbot_classes)
                     tfbot = TFBot('TFBot', [])
                     tfbot.set_kv('Template', template.name)
                     spawner = tfbot
                 else:
                     spawner = create_tfbot(strength=strength_per, tfbot_kind=chosen, restriction=random.randrange(0, 2))
+                used_tfbot_classes.append(spawner.get_kv('Class', None, True))
             elif chosen == 'tank':
                 # Tank strength is per subwave modified by the amount of wavespawns in the subwave
                 # The more tanks there are in a subwave, each future tank has less and less HP
@@ -438,7 +443,7 @@ class Coordinator:
                     # Squads will always have medics as their support
                     if eligible and not self.current_wave_rules['custom_only']:
                         # Middle steps avoid using full bot info
-                        template = random.choice(eligible)
+                        template = select_eligible(eligible, used_tfbot_classes)
                         leader = TFBot('TFBot', [])
                         leader.set_kv('Template', template.name)
                         self.bot_templates_used.append(template.name)
@@ -473,6 +478,7 @@ class Coordinator:
                     squad.spawners.extend(all_squadded)
                     squad.all_subtrees.append(leader)
                     squad.all_subtrees.extend(all_squadded)
+                    used_tfbot_classes.append(leader.get_kv('Class', None, True))
                     spawner = squad
                 elif wavespawn_kind == 'random':
                     # Random will have a random set of tfbots that fill up spawncount
@@ -482,7 +488,7 @@ class Coordinator:
                     while required > 0:
                         # If there are any eligible TFBots, use those first
                         if eligible and not self.current_wave_rules['custom_only']:
-                            template = eligible.pop()
+                            template = eligible.pop()  # No need to select according to classes
                             self.bot_templates_used.append(template.name)
                             tfbot = TFBot('TFBot', [])
                             tfbot.set_kv('Template', template.name)
@@ -499,7 +505,7 @@ class Coordinator:
                     spawner = randomchoice
                 else:
                     if eligible and not self.current_wave_rules['custom_only']:
-                        template = random.choice(eligible)
+                        template = select_eligible(eligible, used_tfbot_classes)
                         tfbot = TFBot('TFBot', [])
                         tfbot.set_kv('Template', template.name)
                         self.bot_templates_used.append(template.name)
@@ -507,6 +513,7 @@ class Coordinator:
                     else:
                         spawner = create_tfbot(strength=tfbot_strength / maxactive, tfbot_kind=chosen)
                         self.template_add(spawner, tfbot_strength / maxactive)
+                    used_tfbot_classes.append(spawner.get_kv('Class', None, True))
 
             # Determine the spawnpoint
             where = weighted_random(map_info[f'spawn_{chosen}'])
